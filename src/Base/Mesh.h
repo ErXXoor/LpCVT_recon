@@ -7,6 +7,8 @@
 #include <igl/read_triangle_mesh.h>
 
 namespace LpCVT{
+    class MeshAdaptor;
+
 class Mesh {
 public:
     Mesh() = default;
@@ -18,6 +20,8 @@ public:
     bool CalculateFaceNormal();
 
     void PlotMesh();
+
+    friend class MeshAdaptor;
 
 private:
     Eigen::MatrixXd m_v;
