@@ -1,0 +1,149 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install",
+			"install_devkit_targets"
+		],
+		"files" : 
+		[
+			"cmake-build-release/_deps/geogram-src/cmake/utilities.cmake",
+			"cmake-build-release/_deps/geogram-src/src/lib/geogram_gfx/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 55,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 270,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 270,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 58,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 66,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 1,
+				"line" : 73,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 2,
+			"component" : "devkit",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"lib/libgeogram_gfx.1.8.6.dylib",
+				"lib/libgeogram_gfx.1.dylib"
+			],
+			"targetId" : "geogram_gfx::@d12846619d42df981ea0",
+			"targetIndex" : 16,
+			"targetInstallNamelink" : "skip",
+			"type" : "target"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "devkit",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"lib/libgeogram_gfx.dylib"
+			],
+			"targetId" : "geogram_gfx::@d12846619d42df981ea0",
+			"targetIndex" : 16,
+			"targetInstallNamelink" : "only",
+			"type" : "target"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "devkit-full",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"lib/libgeogram_gfx.1.8.6.dylib",
+				"lib/libgeogram_gfx.1.dylib"
+			],
+			"targetId" : "geogram_gfx::@d12846619d42df981ea0",
+			"targetIndex" : 16,
+			"targetInstallNamelink" : "skip",
+			"type" : "target"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "devkit-full",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"lib/libgeogram_gfx.dylib"
+			],
+			"targetId" : "geogram_gfx::@d12846619d42df981ea0",
+			"targetIndex" : 16,
+			"targetInstallNamelink" : "only",
+			"type" : "target"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "devkit",
+			"destination" : "include/geogram1/geogram_gfx",
+			"paths" : 
+			[
+				"cmake-build-release/_deps/geogram-src/src/lib/geogram_gfx/."
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 5,
+			"component" : "devkit-full",
+			"destination" : "include/geogram1/geogram_gfx",
+			"paths" : 
+			[
+				"cmake-build-release/_deps/geogram-src/src/lib/geogram_gfx/."
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 6,
+			"component" : "Unspecified",
+			"destination" : "lib/pkgconfig",
+			"paths" : 
+			[
+				"cmake-build-release/_deps/geogram-build/geogram_gfx1.pc"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "_deps/geogram-build/src/lib/geogram_gfx",
+		"source" : "cmake-build-release/_deps/geogram-src/src/lib/geogram_gfx"
+	}
+}

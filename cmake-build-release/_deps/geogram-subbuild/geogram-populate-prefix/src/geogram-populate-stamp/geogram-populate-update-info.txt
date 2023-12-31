@@ -1,0 +1,7 @@
+# This is a generated file and its contents are an internal implementation detail.
+# The patch step will be re-executed if anything in this file changes.
+# No other meaning or use of this file is supported.
+
+command (connected)=/Users/lihongbo/Applications/CLion.app/Contents/bin/cmake/mac/x64/bin/cmake;-Dcan_fetch=YES;-P;/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-subbuild/geogram-populate-prefix/tmp/geogram-populate-gitupdate.cmake
+command (disconnected)=/Users/lihongbo/Applications/CLion.app/Contents/bin/cmake/mac/x64/bin/cmake;-Dcan_fetch=NO;-P;/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-subbuild/geogram-populate-prefix/tmp/geogram-populate-gitupdate.cmake
+work_dir=/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-src

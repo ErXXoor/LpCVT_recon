@@ -1,0 +1,21 @@
+# ninja log v5
+0	101	1704053998130006441	glad-populate-prefix/src/glad-populate-stamp/glad-populate-mkdir	dc450aff39634c4e
+0	101	1704053998130006441	/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/glad-subbuild/glad-populate-prefix/src/glad-populate-stamp/glad-populate-mkdir	dc450aff39634c4e
+102	1166	1704053999194652750	glad-populate-prefix/src/glad-populate-stamp/glad-populate-download	966fe86e17451f4e
+102	1166	1704053999194652750	/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/glad-subbuild/glad-populate-prefix/src/glad-populate-stamp/glad-populate-download	966fe86e17451f4e
+1166	1338	0	glad-populate-prefix/src/glad-populate-stamp/glad-populate-update	d1814e5805ea9e12
+1166	1338	0	/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/glad-subbuild/glad-populate-prefix/src/glad-populate-stamp/glad-populate-update	d1814e5805ea9e12
+1338	1437	1704053999465480216	glad-populate-prefix/src/glad-populate-stamp/glad-populate-patch	8af1363098b9a9f0
+1338	1437	1704053999465480216	/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/glad-subbuild/glad-populate-prefix/src/glad-populate-stamp/glad-populate-patch	8af1363098b9a9f0
+1437	1538	1704053999566557775	glad-populate-prefix/src/glad-populate-stamp/glad-populate-configure	53fd5d0807e4c1e2
+1437	1538	1704053999566557775	/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/glad-subbuild/glad-populate-prefix/src/glad-populate-stamp/glad-populate-configure	53fd5d0807e4c1e2
+1538	1636	1704053999664747055	glad-populate-prefix/src/glad-populate-stamp/glad-populate-build	20e18b130833b0c
+1538	1636	1704053999664747055	/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/glad-subbuild/glad-populate-prefix/src/glad-populate-stamp/glad-populate-build	20e18b130833b0c
+1636	1738	1704053999766451995	glad-populate-prefix/src/glad-populate-stamp/glad-populate-install	de812177846f33ae
+1636	1738	1704053999766451995	/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/glad-subbuild/glad-populate-prefix/src/glad-populate-stamp/glad-populate-install	de812177846f33ae
+1738	1837	1704053999865853125	glad-populate-prefix/src/glad-populate-stamp/glad-populate-test	9a9470f0603e7b72
+1738	1837	1704053999865853125	/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/glad-subbuild/glad-populate-prefix/src/glad-populate-stamp/glad-populate-test	9a9470f0603e7b72
+1837	1978	1704054000006654617	CMakeFiles/glad-populate-complete	4eba49d849563c6c
+1837	1978	1704054000006654617	glad-populate-prefix/src/glad-populate-stamp/glad-populate-done	4eba49d849563c6c
+1837	1978	1704054000006654617	/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/glad-subbuild/CMakeFiles/glad-populate-complete	4eba49d849563c6c
+1837	1978	1704054000006654617	/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/glad-subbuild/glad-populate-prefix/src/glad-populate-stamp/glad-populate-done	4eba49d849563c6c

@@ -8,6 +8,7 @@
 #include <geogram/mesh/mesh.h>
 #include <geogram/voronoi/integration_simplex.h>
 #include "CVT/LpCVTWrap.h"
+#include <geogram/mesh/mesh_AABB.h>
 
 namespace LpCVT {
     class Remesher {
@@ -15,7 +16,8 @@ namespace LpCVT {
         enum class RemeshType {
             Lloyd_CVT = 0,
             Newton_CVT,
-            LPCVT
+            LPCVT,
+            LPCVT_NORMAL
         };
 
         Remesher() = default;
@@ -36,6 +38,7 @@ namespace LpCVT {
     private:
         std::shared_ptr<LpCVTWrap> m_cvt;
         GEO::IntegrationSimplex_var m_is = nullptr;
+        std::shared_ptr<GEO::MeshFacetsAABB> m_facetsAABB = nullptr;
         RemeshType m_type;
     };
 }

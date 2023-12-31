@@ -17,6 +17,8 @@ namespace LpCVT {
 
         const double *vertex_ptr(GEO::index_t v) const;
 
+        void set_facetsAABB(std::shared_ptr<GEO::MeshFacetsAABB> facetsAABB);
+
         double eval(
                 GEO::index_t center_vertex_index,
 
@@ -51,7 +53,9 @@ namespace LpCVT {
         unsigned int nb_dcoeffs;
         std::vector<std::vector<unsigned int>> E_pow;
         std::vector<std::vector<std::vector<unsigned int>>> dE_pow;
-        
+        std::shared_ptr<GEO::MeshFacetsAABB> m_facetsAABB = nullptr;
+        GEO::Attribute<double> m_face_normal;
+
     };
 
 }

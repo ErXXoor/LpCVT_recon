@@ -1,0 +1,53 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install",
+			"install_runtime_targets"
+		],
+		"files" : 
+		[
+			"cmake-build-release/_deps/geogram-src/cmake/utilities.cmake",
+			"cmake-build-release/_deps/geogram-src/src/bin/vorpaview/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 7,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 241,
+				"parent" : 1
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 2,
+			"component" : "runtime",
+			"destination" : "bin",
+			"paths" : 
+			[
+				"bin/vorpaview"
+			],
+			"targetId" : "vorpaview::@bb5e6276b5690d49787b",
+			"targetIndex" : 45,
+			"type" : "target"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "_deps/geogram-build/src/bin/vorpaview",
+		"source" : "cmake-build-release/_deps/geogram-src/src/bin/vorpaview"
+	}
+}

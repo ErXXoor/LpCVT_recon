@@ -1,0 +1,2714 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "lib/libgeogram.dylib"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"install",
+			"install_devkit_targets",
+			"link_directories",
+			"include",
+			"target_link_libraries",
+			"add_definitions",
+			"include_directories",
+			"target_include_directories",
+			"target_compile_features"
+		],
+		"files" : 
+		[
+			"cmake-build-release/_deps/geogram-src/src/lib/geogram/CMakeLists.txt",
+			"cmake-build-release/_deps/geogram-src/cmake/utilities.cmake",
+			"cmake-build-release/_deps/geogram-src/cmake/geogram.cmake",
+			"cmake-build-release/_deps/geogram-src/CMakeLists.txt",
+			"cmake/geogram.cmake",
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 50,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 95,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 270,
+				"parent" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 270,
+				"parent" : 2
+			},
+			{
+				"file" : 3
+			},
+			{
+				"command" : 4,
+				"file" : 3,
+				"line" : 52,
+				"parent" : 5
+			},
+			{
+				"file" : 2,
+				"parent" : 6
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 147,
+				"parent" : 7
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 86,
+				"parent" : 0
+			},
+			{
+				"command" : 6,
+				"file" : 2,
+				"line" : 62,
+				"parent" : 7
+			},
+			{
+				"command" : 6,
+				"file" : 2,
+				"line" : 74,
+				"parent" : 7
+			},
+			{
+				"command" : 6,
+				"file" : 0,
+				"line" : 38,
+				"parent" : 0
+			},
+			{
+				"command" : 6,
+				"file" : 2,
+				"line" : 66,
+				"parent" : 7
+			},
+			{
+				"command" : 6,
+				"file" : 2,
+				"line" : 70,
+				"parent" : 7
+			},
+			{
+				"command" : 6,
+				"file" : 2,
+				"line" : 97,
+				"parent" : 7
+			},
+			{
+				"command" : 6,
+				"file" : 0,
+				"line" : 41,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 2,
+				"line" : 145,
+				"parent" : 7
+			},
+			{
+				"command" : 7,
+				"file" : 2,
+				"line" : 146,
+				"parent" : 7
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 48,
+				"parent" : 0
+			},
+			{
+				"command" : 8,
+				"file" : 0,
+				"line" : 52,
+				"parent" : 0
+			},
+			{
+				"file" : 5
+			},
+			{
+				"command" : 4,
+				"file" : 5,
+				"line" : 7,
+				"parent" : 21
+			},
+			{
+				"file" : 4,
+				"parent" : 22
+			},
+			{
+				"command" : 9,
+				"file" : 4,
+				"line" : 8,
+				"parent" : 23
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : " -Qunused-arguments -std=c++11 -stdlib=libc++ -Wno-c++98-compat -m64 -msse3 -O3 -DNDEBUG -D_FORTIFY_SOURCE=2 -std=gnu++11 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk -mmacosx-version-min=14.1 -fPIC -fcolor-diagnostics   -Weverything -Wno-padded -Wno-float-equal -Wno-global-constructors -Wno-exit-time-destructors -Wno-old-style-cast -Wno-format-nonliteral"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 10,
+					"define" : "GEOGRAM_WITH_HLBFGS"
+				},
+				{
+					"backtrace" : 11,
+					"define" : "GEOGRAM_WITH_LUA"
+				},
+				{
+					"backtrace" : 12,
+					"define" : "GEOGRAM_WITH_PDEL"
+				},
+				{
+					"backtrace" : 13,
+					"define" : "GEOGRAM_WITH_TETGEN"
+				},
+				{
+					"backtrace" : 14,
+					"define" : "GEOGRAM_WITH_TRIANGLE"
+				},
+				{
+					"backtrace" : 15,
+					"define" : "GEO_DYNAMIC_LIBS"
+				},
+				{
+					"backtrace" : 16,
+					"define" : "NL_WITH_AMGCL"
+				},
+				{
+					"define" : "geogram_EXPORTS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 17,
+					"path" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-src/src/lib"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-src/src/lib/geogram_gfx/third_party"
+				},
+				{
+					"backtrace" : 19,
+					"path" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-build/src/lib"
+				},
+				{
+					"backtrace" : 20,
+					"path" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-src/src/lib/geogram/third_party/amgcl"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					24
+				],
+				"standard" : "11"
+			},
+			"sourceIndexes" : 
+			[
+				0,
+				2,
+				6,
+				9,
+				11,
+				13,
+				15,
+				17,
+				19,
+				21,
+				24,
+				26,
+				28,
+				30,
+				32,
+				35,
+				37,
+				41,
+				43,
+				46,
+				49,
+				50,
+				51,
+				54,
+				59,
+				61,
+				66,
+				68,
+				70,
+				73,
+				75,
+				77,
+				79,
+				81,
+				84,
+				86,
+				88,
+				90,
+				92,
+				94,
+				96,
+				98,
+				100,
+				102,
+				104,
+				107,
+				109,
+				111,
+				113,
+				115,
+				117,
+				119,
+				121,
+				124,
+				126,
+				128,
+				130,
+				132,
+				134,
+				136,
+				138,
+				140,
+				143,
+				145,
+				147,
+				149,
+				151,
+				153,
+				155,
+				157,
+				159,
+				161,
+				163,
+				165,
+				167,
+				169,
+				172,
+				174,
+				178,
+				180,
+				182,
+				184,
+				186,
+				188,
+				193,
+				221,
+				223,
+				225,
+				227,
+				229,
+				231,
+				233,
+				235,
+				237,
+				239,
+				241,
+				243,
+				245,
+				247,
+				249,
+				251,
+				253,
+				255,
+				257,
+				258
+			]
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : " -m64 -msse3 -O3 -DNDEBUG -D_FORTIFY_SOURCE=2 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk -mmacosx-version-min=14.1 -fPIC -fcolor-diagnostics   -Weverything -Wno-padded -Wno-float-equal -Wno-global-constructors -Wno-exit-time-destructors -Wno-old-style-cast -Wno-format-nonliteral"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 10,
+					"define" : "GEOGRAM_WITH_HLBFGS"
+				},
+				{
+					"backtrace" : 11,
+					"define" : "GEOGRAM_WITH_LUA"
+				},
+				{
+					"backtrace" : 12,
+					"define" : "GEOGRAM_WITH_PDEL"
+				},
+				{
+					"backtrace" : 13,
+					"define" : "GEOGRAM_WITH_TETGEN"
+				},
+				{
+					"backtrace" : 14,
+					"define" : "GEOGRAM_WITH_TRIANGLE"
+				},
+				{
+					"backtrace" : 15,
+					"define" : "GEO_DYNAMIC_LIBS"
+				},
+				{
+					"backtrace" : 16,
+					"define" : "NL_WITH_AMGCL"
+				},
+				{
+					"define" : "geogram_EXPORTS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 17,
+					"path" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-src/src/lib"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-src/src/lib/geogram_gfx/third_party"
+				},
+				{
+					"backtrace" : 19,
+					"path" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-build/src/lib"
+				},
+				{
+					"backtrace" : 20,
+					"path" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-src/src/lib/geogram/third_party/amgcl"
+				}
+			],
+			"language" : "C",
+			"sourceIndexes" : 
+			[
+				195,
+				196,
+				198,
+				200,
+				202,
+				204,
+				207,
+				210,
+				212,
+				214,
+				215,
+				218
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"id" : "geogram_third_party::@875705e471542c93829d"
+		}
+	],
+	"folder" : 
+	{
+		"name" : "GEOGRAM"
+	},
+	"id" : "geogram::@9f5b202ce5e9fb17d280",
+	"install" : 
+	{
+		"destinations" : 
+		[
+			{
+				"backtrace" : 3,
+				"path" : "lib"
+			},
+			{
+				"backtrace" : 3,
+				"path" : "lib"
+			},
+			{
+				"backtrace" : 4,
+				"path" : "lib"
+			},
+			{
+				"backtrace" : 4,
+				"path" : "lib"
+			}
+		],
+		"prefix" : 
+		{
+			"path" : "/usr/local"
+		}
+	},
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-Wl,-undefined,error",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 8,
+				"fragment" : "-L/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-src/cmake-build-release/lib",
+				"role" : "libraryPath"
+			},
+			{
+				"fragment" : "-Wl,-rpath,/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-src/cmake-build-release/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "-lpthread",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "-ldl",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "geogram",
+	"nameOnDisk" : "libgeogram.dylib",
+	"paths" : 
+	{
+		"build" : "_deps/geogram-build/src/lib/geogram",
+		"source" : "cmake-build-release/_deps/geogram-src/src/lib/geogram"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files\\basic",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				58,
+				59,
+				60,
+				61,
+				62,
+				63,
+				64,
+				65
+			]
+		},
+		{
+			"name" : "Source Files\\numerics",
+			"sourceIndexes" : 
+			[
+				66,
+				67,
+				68,
+				69,
+				70,
+				71,
+				72,
+				73,
+				74,
+				75,
+				76,
+				77,
+				78,
+				79,
+				80,
+				81,
+				82
+			]
+		},
+		{
+			"name" : "Source Files\\mesh",
+			"sourceIndexes" : 
+			[
+				83,
+				84,
+				85,
+				86,
+				87,
+				88,
+				89,
+				90,
+				91,
+				92,
+				93,
+				94,
+				95,
+				96,
+				97,
+				98,
+				99,
+				100,
+				101,
+				102,
+				103,
+				104,
+				105,
+				106,
+				107,
+				108,
+				109,
+				110,
+				111,
+				112,
+				113,
+				114,
+				115,
+				116,
+				117,
+				118,
+				119,
+				120,
+				121,
+				122,
+				123,
+				124,
+				125,
+				126,
+				127,
+				128,
+				129,
+				130,
+				131,
+				132,
+				133,
+				134,
+				135,
+				136,
+				137
+			]
+		},
+		{
+			"name" : "Source Files\\delaunay",
+			"sourceIndexes" : 
+			[
+				138,
+				139,
+				140,
+				141,
+				142,
+				143,
+				144,
+				145,
+				146,
+				147,
+				148,
+				149,
+				150,
+				151,
+				152,
+				153,
+				154,
+				155,
+				156,
+				157,
+				158,
+				159,
+				160
+			]
+		},
+		{
+			"name" : "Source Files\\voronoi",
+			"sourceIndexes" : 
+			[
+				161,
+				162,
+				163,
+				164,
+				165,
+				166,
+				167,
+				168,
+				169,
+				170,
+				171,
+				172,
+				173,
+				174,
+				175,
+				176,
+				177,
+				178,
+				179
+			]
+		},
+		{
+			"name" : "Source Files\\points",
+			"sourceIndexes" : 
+			[
+				180,
+				181,
+				182,
+				183,
+				184,
+				185,
+				186,
+				187,
+				188,
+				189
+			]
+		},
+		{
+			"name" : "Source Files\\api",
+			"sourceIndexes" : 
+			[
+				190
+			]
+		},
+		{
+			"name" : "Source Files\\NL",
+			"sourceIndexes" : 
+			[
+				191,
+				192,
+				193,
+				194,
+				195,
+				196,
+				197,
+				198,
+				199,
+				200,
+				201,
+				202,
+				203,
+				204,
+				205,
+				206,
+				207,
+				208,
+				209,
+				210,
+				211,
+				212,
+				213,
+				214,
+				215,
+				216,
+				217,
+				218,
+				219
+			]
+		},
+		{
+			"name" : "Source Files\\image",
+			"sourceIndexes" : 
+			[
+				220,
+				221,
+				222,
+				223,
+				224,
+				225,
+				226,
+				227,
+				228,
+				229,
+				230,
+				231,
+				232,
+				233,
+				234,
+				235,
+				236,
+				237,
+				238
+			]
+		},
+		{
+			"name" : "Source Files\\parameterization",
+			"sourceIndexes" : 
+			[
+				239,
+				240,
+				241,
+				242,
+				243,
+				244,
+				245,
+				246,
+				247,
+				248,
+				249,
+				250,
+				251,
+				252,
+				253,
+				254
+			]
+		},
+		{
+			"name" : "Source Files\\bibliography",
+			"sourceIndexes" : 
+			[
+				255,
+				256,
+				257
+			]
+		},
+		{
+			"name" : "Source Files\\lua",
+			"sourceIndexes" : 
+			[
+				258,
+				259,
+				260
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				261
+			]
+		},
+		{
+			"name" : "Object Libraries",
+			"sourceIndexes" : 
+			[
+				262,
+				263,
+				264,
+				265,
+				266,
+				267,
+				268,
+				269,
+				270,
+				271,
+				272,
+				273,
+				274,
+				275,
+				276,
+				277,
+				278,
+				279,
+				280,
+				281,
+				282,
+				283,
+				284,
+				285,
+				286,
+				287,
+				288,
+				289,
+				290,
+				291,
+				292,
+				293,
+				294,
+				295,
+				296,
+				297,
+				298,
+				299,
+				300,
+				301,
+				302,
+				303,
+				304,
+				305,
+				306,
+				307,
+				308,
+				309,
+				310,
+				311,
+				312,
+				313,
+				314,
+				315,
+				316,
+				317,
+				318,
+				319,
+				320,
+				321,
+				322
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/algorithm.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/algorithm.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/android_utils.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/android_utils.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/android_wrapper.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/argused.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/assert.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/assert.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/atomics.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/attributes.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/attributes.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/b_stream.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/b_stream.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/command_line.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/command_line.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/command_line_args.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/command_line_args.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/common.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/common.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/counted.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/counted.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/debug_stream.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/debug_stream.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/determinant.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/environment.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/environment.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/factory.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/factory.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/file_system.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/file_system.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/geofile.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/geofile.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/geometry.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/geometry.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/geometry_nd.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/line_stream.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/line_stream.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/logger.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/logger.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/matrix.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/memory.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/numeric.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/numeric.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/packed_arrays.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/packed_arrays.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/permutation.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/process.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/process.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/process_private.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/process_unix.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/process_win.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/progress.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/progress.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/psm.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/quaternion.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/quaternion.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/range.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/rationalg.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/smart_pointer.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/stopwatch.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/stopwatch.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/string.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/string.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/thread_sync.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/vecg.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/basic/vechg.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/numerics/PCK.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/numerics/PCK.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/numerics/exact_geometry.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/numerics/exact_geometry.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/numerics/expansion_nt.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/numerics/expansion_nt.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/numerics/interval_nt.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/numerics/lbfgs_optimizers.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/numerics/lbfgs_optimizers.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/numerics/matrix_util.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/numerics/matrix_util.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/numerics/multi_precision.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/numerics/multi_precision.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/numerics/optimizer.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/numerics/optimizer.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/numerics/predicates.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/numerics/predicates.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/index.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_AABB.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_AABB.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_baking.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_baking.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_compare.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_compare.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_decimate.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_decimate.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_degree3_vertices.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_degree3_vertices.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_distance.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_distance.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_fill_holes.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_fill_holes.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_frame_field.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_frame_field.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_geometry.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_geometry.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_halfedges.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_halfedges.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_intersection.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_io.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_io.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_local_operations.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_local_operations.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_manifold_harmonics.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_manifold_harmonics.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_partition.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_partition.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_preprocessing.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_preprocessing.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_remesh.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_remesh.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_reorder.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_reorder.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_repair.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_repair.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_sampling.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_smoothing.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_smoothing.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_subdivision.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_subdivision.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_surface_intersection.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_surface_intersection.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_surface_intersection_internal.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_surface_intersection_internal.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_tetrahedralize.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_tetrahedralize.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_topology.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/mesh_topology.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/triangle_intersection.cpp",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/mesh/triangle_intersection.h",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/CDT_2d.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/CDT_2d.h",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/LFS.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/LFS.h",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/cavity.h",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/delaunay.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/delaunay.h",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/delaunay_2d.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/delaunay_2d.h",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/delaunay_3d.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/delaunay_3d.h",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/delaunay_nn.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/delaunay_nn.h",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/delaunay_tetgen.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/delaunay_tetgen.h",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/delaunay_triangle.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/delaunay_triangle.h",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/parallel_delaunay_3d.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/parallel_delaunay_3d.h",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/periodic.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/periodic.h",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/periodic_delaunay_3d.cpp",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/delaunay/periodic_delaunay_3d.h",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/CVT.cpp",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/CVT.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/RVD.cpp",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/RVD.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/RVD_callback.cpp",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/RVD_callback.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/RVD_mesh_builder.cpp",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/RVD_mesh_builder.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/convex_cell.cpp",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/convex_cell.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/generic_RVD.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/generic_RVD_cell.cpp",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/generic_RVD_cell.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/generic_RVD_polygon.cpp",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/generic_RVD_polygon.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/generic_RVD_utils.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/generic_RVD_vertex.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/integration_simplex.cpp",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/voronoi/integration_simplex.h",
+			"sourceGroupIndex" : 4
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/points/co3ne.cpp",
+			"sourceGroupIndex" : 5
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/points/co3ne.h",
+			"sourceGroupIndex" : 5
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/points/colocate.cpp",
+			"sourceGroupIndex" : 5
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/points/colocate.h",
+			"sourceGroupIndex" : 5
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/points/kd_tree.cpp",
+			"sourceGroupIndex" : 5
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/points/kd_tree.h",
+			"sourceGroupIndex" : 5
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/points/nn_search.cpp",
+			"sourceGroupIndex" : 5
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/points/nn_search.h",
+			"sourceGroupIndex" : 5
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/points/principal_axes.cpp",
+			"sourceGroupIndex" : 5
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/points/principal_axes.h",
+			"sourceGroupIndex" : 5
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/api/defs.h",
+			"sourceGroupIndex" : 6
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl.h",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_64.h",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_amgcl.cpp",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_amgcl.h",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_api.c",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_arpack.c",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_arpack.h",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_blas.c",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_blas.h",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_cholmod.c",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_cholmod.h",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_context.c",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_context.h",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_cuda.c",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_cuda.h",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_ext.h",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_iterative_solvers.c",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_iterative_solvers.h",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_linkage.h",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_matrix.c",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_matrix.h",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_mkl.c",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_mkl.h",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_os.c",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_preconditioners.c",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_preconditioners.h",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_private.h",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_superlu.c",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/NL/nl_superlu.h",
+			"sourceGroupIndex" : 7
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/color.h",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/colormap.cpp",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/colormap.h",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/image.cpp",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/image.h",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/image_library.cpp",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/image_library.h",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/image_rasterizer.cpp",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/image_rasterizer.h",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/image_serializer.cpp",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/image_serializer.h",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/image_serializer_pgm.cpp",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/image_serializer_pgm.h",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/image_serializer_stb.cpp",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/image_serializer_stb.h",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/image_serializer_xpm.cpp",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/image_serializer_xpm.h",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/morpho_math.cpp",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/image/morpho_math.h",
+			"sourceGroupIndex" : 8
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/parameterization/mesh_ABF.cpp",
+			"sourceGroupIndex" : 9
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/parameterization/mesh_ABF.h",
+			"sourceGroupIndex" : 9
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/parameterization/mesh_LSCM.cpp",
+			"sourceGroupIndex" : 9
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/parameterization/mesh_LSCM.h",
+			"sourceGroupIndex" : 9
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/parameterization/mesh_PGP_2d.cpp",
+			"sourceGroupIndex" : 9
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/parameterization/mesh_PGP_2d.h",
+			"sourceGroupIndex" : 9
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/parameterization/mesh_atlas_maker.cpp",
+			"sourceGroupIndex" : 9
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/parameterization/mesh_atlas_maker.h",
+			"sourceGroupIndex" : 9
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/parameterization/mesh_global_param.cpp",
+			"sourceGroupIndex" : 9
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/parameterization/mesh_global_param.h",
+			"sourceGroupIndex" : 9
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/parameterization/mesh_param_packer.cpp",
+			"sourceGroupIndex" : 9
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/parameterization/mesh_param_packer.h",
+			"sourceGroupIndex" : 9
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/parameterization/mesh_param_validator.cpp",
+			"sourceGroupIndex" : 9
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/parameterization/mesh_param_validator.h",
+			"sourceGroupIndex" : 9
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/parameterization/mesh_segmentation.cpp",
+			"sourceGroupIndex" : 9
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/parameterization/mesh_segmentation.h",
+			"sourceGroupIndex" : 9
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/bibliography/bibliography.cpp",
+			"sourceGroupIndex" : 10
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/bibliography/bibliography.h",
+			"sourceGroupIndex" : 10
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/bibliography/embedded_references.cpp",
+			"sourceGroupIndex" : 10
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/lua/lua_io.cpp",
+			"sourceGroupIndex" : 11
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/lua/lua_io.h",
+			"sourceGroupIndex" : 11
+		},
+		{
+			"backtrace" : 1,
+			"path" : "cmake-build-release/_deps/geogram-src/src/lib/geogram/lua/lua_wrap.h",
+			"sourceGroupIndex" : 11
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/version.h",
+			"sourceGroupIndex" : 12
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/libMeshb/sources/libmeshb7.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/rply/rply.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/zlib/adler32.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/zlib/compress.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/zlib/crc32.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/zlib/deflate.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/zlib/gzclose.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/zlib/gzlib.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/zlib/gzread.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/zlib/gzwrite.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/zlib/inffast.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/zlib/inflate.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/zlib/inftrees.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/zlib/trees.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/zlib/uncompr.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/zlib/zutil.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/PoissonRecon/Factor.cpp.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/PoissonRecon/Geometry.cpp.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/PoissonRecon/MarchingCubes.cpp.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/PoissonRecon/poisson_geogram.cpp.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/xatlas/xatlas.cpp.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lapi.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lauxlib.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lbaselib.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lbitlib.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lcode.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lcorolib.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lctype.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/ldblib.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/ldebug.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/ldo.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/ldump.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lfunc.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lgc.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/linit.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/liolib.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/llex.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lmathlib.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lmem.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/loadlib.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lobject.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lopcodes.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/loslib.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lparser.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lstate.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lstring.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lstrlib.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/ltable.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/ltablib.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/ltm.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lundump.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lutf8lib.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lvm.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/lua/lzio.c.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/HLBFGS/HLBFGS.cpp.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/HLBFGS/HLBFGS_BLAS.cpp.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/HLBFGS/ICFS.cpp.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/HLBFGS/LineSearch.cpp.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/HLBFGS/Lite_Sparse_Matrix.cpp.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/tetgen/tetgen.cpp.o",
+			"sourceGroupIndex" : 13
+		},
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : "cmake-build-release/_deps/geogram-build/src/lib/geogram/third_party/CMakeFiles/geogram_third_party.dir/triangle/triangle.c.o",
+			"sourceGroupIndex" : 13
+		}
+	],
+	"type" : "SHARED_LIBRARY"
+}

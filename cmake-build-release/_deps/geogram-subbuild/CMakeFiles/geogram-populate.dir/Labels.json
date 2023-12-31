@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-subbuild/CMakeFiles/geogram-populate"
+		},
+		{
+			"file" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-subbuild/CMakeFiles/geogram-populate.rule"
+		},
+		{
+			"file" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-subbuild/CMakeFiles/geogram-populate-complete.rule"
+		},
+		{
+			"file" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-subbuild/geogram-populate-prefix/src/geogram-populate-stamp/geogram-populate-build.rule"
+		},
+		{
+			"file" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-subbuild/geogram-populate-prefix/src/geogram-populate-stamp/geogram-populate-configure.rule"
+		},
+		{
+			"file" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-subbuild/geogram-populate-prefix/src/geogram-populate-stamp/geogram-populate-download.rule"
+		},
+		{
+			"file" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-subbuild/geogram-populate-prefix/src/geogram-populate-stamp/geogram-populate-install.rule"
+		},
+		{
+			"file" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-subbuild/geogram-populate-prefix/src/geogram-populate-stamp/geogram-populate-mkdir.rule"
+		},
+		{
+			"file" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-subbuild/geogram-populate-prefix/src/geogram-populate-stamp/geogram-populate-patch.rule"
+		},
+		{
+			"file" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-subbuild/geogram-populate-prefix/src/geogram-populate-stamp/geogram-populate-test.rule"
+		},
+		{
+			"file" : "/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-subbuild/geogram-populate-prefix/src/geogram-populate-stamp/geogram-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"geogram-populate"
+		],
+		"name" : "geogram-populate"
+	}
+}

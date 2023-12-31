@@ -1,0 +1,53 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install",
+			"install_runtime_targets"
+		],
+		"files" : 
+		[
+			"cmake-build-release/_deps/geogram-src/cmake/utilities.cmake",
+			"cmake-build-release/_deps/geogram-src/src/examples/graphics/demo_Raytrace/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 7,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 241,
+				"parent" : 1
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 2,
+			"component" : "runtime",
+			"destination" : "bin",
+			"paths" : 
+			[
+				"bin/geogram_demo_Raytrace"
+			],
+			"targetId" : "geogram_demo_Raytrace::@a24ec62fe458ebddb29b",
+			"targetIndex" : 14,
+			"type" : "target"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "_deps/geogram-build/src/examples/graphics/demo_Raytrace",
+		"source" : "cmake-build-release/_deps/geogram-src/src/examples/graphics/demo_Raytrace"
+	}
+}
