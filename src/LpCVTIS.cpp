@@ -67,10 +67,24 @@ namespace LpCVT {
                 }
             }
         }
+
     }
 
     const double *LpCVTIS::vertex_ptr(GEO::index_t i) const {
         return points_ + i * points_stride_;
+    }
+
+    void LpCVTIS::set_facetsAABB(std::shared_ptr<GEO::MeshFacetsAABB> facetsAABB) {
+        if (facetsAABB == nullptr) {
+            std::cerr << "facetsAABB is nullptr" << std::endl;
+            return;
+        }
+        m_face_normal.bind_if_is_defined(facetsAABB->mesh()->facets.attributes(), "normal");
+        if (!m_face_normal.is_bound() || m_face_normal.dimension() != 3) {
+            std::cerr << "normal is not bound" << std::endl;
+            return;
+        }
+        m_facetsAABB = facetsAABB;
     }
 
     double LpCVTIS::eval(
@@ -83,10 +97,22 @@ namespace LpCVT {
             GEO::index_t v_adj
     ) {
         // Compute normal of the triangle
-        GEO::vec3 p1_vec3 = GEO::vec3(p1.point());
-        GEO::vec3 p2_vec3 = GEO::vec3(p2.point());
-        GEO::vec3 p3_vec3 = GEO::vec3(p3.point());
-        auto N = normalize(cross(p2_vec3 - p1_vec3, p3_vec3 - p1_vec3));
+
+
+        auto p1_vec3 = GEO::vec3(p1.point());
+        auto p2_vec3 = GEO::vec3(p2.point());
+        auto p3_vec3 = GEO::vec3(p3.point());
+
+        GEO::vec3 N = normalize(cross(p2_vec3 - p1_vec3, p3_vec3 - p1_vec3));
+//        if (m_facetsAABB != nullptr) {
+//            auto mid = (p1_vec3 + p2_vec3 + p3_vec3) / 3.0;
+//            auto f_id = m_facetsAABB->nearest_facet(mid);
+//            auto f_n = GEO::vec3(m_face_normal[3 * f_id], m_face_normal[3 * f_id + 1], m_face_normal[3 * f_id + 2]);
+//            if (dot(N, f_n) < 0) {
+//                N = -N;
+//            }
+//        }
+
         GEO::mat3 N_mat3;
         N_mat3(0, 0) = N.x * N.x;
         N_mat3(0, 1) = N.x * N.y;
