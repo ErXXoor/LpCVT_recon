@@ -1,3 +1,0 @@
-/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-subbuild/CMakeFiles/geogram-populate.dir
-/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-subbuild/CMakeFiles/edit_cache.dir
-/Users/lihongbo/Desktop/code/LpCVT_recon/cmake-build-release/_deps/geogram-subbuild/CMakeFiles/rebuild_cache.dir
