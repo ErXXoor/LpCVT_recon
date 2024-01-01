@@ -46,8 +46,10 @@ namespace LpCVT {
 
         void matTvecmul(const GEO::mat3 &M, const GEO::vec3 &U, GEO::vec3 &V);
 
+        constexpr unsigned int getdim() const { return m_dim; }
+
     private:
-        unsigned int m_dim;
+        const unsigned int m_dim;
         unsigned int m_degree;
         unsigned int nb_coeffs;
         unsigned int nb_dcoeffs;
