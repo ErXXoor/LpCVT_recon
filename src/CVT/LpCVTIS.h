@@ -7,6 +7,7 @@
 
 #include <geogram/voronoi/integration_simplex.h>
 #include <geogram/mesh/mesh_AABB.h>
+#include <mutex>
 
 namespace LpCVT {
     class LpCVTIS : public GEO::IntegrationSimplex {
@@ -33,6 +34,14 @@ namespace LpCVT {
         double grad_tri(const GEO::vec3 &U1, const GEO::vec3 &U2, const GEO::vec3 &U3,
                         GEO::vec3 &dTdU1, GEO::vec3 &dTdU2, GEO::vec3 &dTdU3);
 
+        double grad_tri(unsigned int dim,
+                        const double *U1,
+                        const double *U2,
+                        const double *U3,
+                        std::vector<double> &dTdU1,
+                        std::vector<double> &dTdU2,
+                        std::vector<double> &dTdU3);
+
         //Utils
         void vecmul(const double *p1, const double *p2, double *to);
 
@@ -46,7 +55,6 @@ namespace LpCVT {
 
         void matTvecmul(const GEO::mat3 &M, const GEO::vec3 &U, GEO::vec3 &V);
 
-        constexpr unsigned int getdim() const { return m_dim; }
 
     private:
         const unsigned int m_dim;

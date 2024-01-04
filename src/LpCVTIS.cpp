@@ -5,6 +5,9 @@
 #include <geogram/voronoi/generic_RVD.h>
 #include <geogram/basic/smart_pointer.h>
 #include <geogram/basic/geometry_nd.h>
+#include <stan/math.hpp>
+#include <thread>
+#include <stan/math/rev/core/chainablestack.hpp>
 
 namespace LpCVT {
 
@@ -98,9 +101,9 @@ namespace LpCVT {
             GEO::index_t v_adj
     ) {
         // Compute normal of the triangle
-        auto p1_vec8 = GEO::vecng<8, double>(p1.point());
-        auto p2_vec8 = GEO::vecng<8, double>(p2.point());
-        auto p3_vec8 = GEO::vecng<8, double>(p3.point());
+        auto p1_vec8 = GEO::vecng<3, double>(p1.point());
+        auto p2_vec8 = GEO::vecng<3, double>(p2.point());
+        auto p3_vec8 = GEO::vecng<3, double>(p3.point());
 
         auto p1_vec3 = GEO::vec3(p1.point()[0], p1.point()[1], p1.point()[2]);
         auto p2_vec3 = GEO::vec3(p2.point()[0], p2.point()[1], p2.point()[2]);
@@ -128,7 +131,7 @@ namespace LpCVT {
         N_mat3(2, 2) = N.z * N.z;
         N_mat3 = N_mat3 * 4;
 
-        GEO::Matrix<8, double> M;
+        GEO::Matrix<3, double> M;
         M.load_identity();
         for (auto i = 0; i < 3; i++) {
             for (auto j = 0; j < 3; j++) {
@@ -137,15 +140,15 @@ namespace LpCVT {
         }
 
         auto p0 = vertex_ptr(v);
-        std::vector<std::vector<GEO::vecng<8, double>>> U_pow;
-        std::vector<double> init_8d(8, 1.0);
+        std::vector<std::vector<GEO::vecng<3, double>>> U_pow;
+        std::vector<double> init_8d(3, 1.0);
         U_pow.resize(3);
         U_pow[0].resize(m_degree + 1);
         U_pow[1].resize(m_degree + 1);
         U_pow[2].resize(m_degree + 1);
-        U_pow[0][0] = GEO::vecng<8, double>(init_8d.data());
-        U_pow[1][0] = GEO::vecng<8, double>(init_8d.data());
-        U_pow[2][0] = GEO::vecng<8, double>(init_8d.data());
+        U_pow[0][0] = GEO::vecng<3, double>(init_8d.data());
+        U_pow[1][0] = GEO::vecng<3, double>(init_8d.data());
+        U_pow[2][0] = GEO::vecng<3, double>(init_8d.data());
 
         std::vector<double> u0;
         std::vector<double> u1;
@@ -169,7 +172,7 @@ namespace LpCVT {
         // Computation of function value.
         double E = 0.0;
         for (unsigned int i = 0; i < nb_coeffs; i++) {
-            GEO::vecng<8, double> W;
+            GEO::vecng<3, double> W;
             unsigned int alpha = E_pow[i][0];
             unsigned int beta = E_pow[i][1];
             unsigned int gamma = E_pow[i][2];
@@ -178,8 +181,8 @@ namespace LpCVT {
         }
 
         // Computation of gradient
-        std::vector<double> dE_init(8, 0.0);
-        GEO::vecng<8, double> dEdU1(dE_init.data()), dEdU2(dE_init.data()), dEdU3(dE_init.data());
+        std::vector<double> dE_init(3, 0.0);
+        GEO::vecng<3, double> dEdU1(dE_init.data()), dEdU2(dE_init.data()), dEdU3(dE_init.data());
         for (unsigned int i = 0; i < nb_dcoeffs; i++) {
             {
                 unsigned int alpha = dE_pow[0][i][0];
@@ -203,15 +206,40 @@ namespace LpCVT {
 
         // Compute tet measure and its
         // derivatives relative to U1, U2 and U3.
-        GEO::vec3 dTdU1, dTdU2, dTdU3;
-//        double T = grad_tri(
+
+//        GEO::vecng<3, double> dTdU1_gt, dTdU2_gt, dTdU3_gt;
+//        double T_gt = grad_tri(
 //                U_pow[0][1], U_pow[1][1], U_pow[2][1],
-//                dTdU1, dTdU2, dTdU3
+//                dTdU1_gt, dTdU2_gt, dTdU3_gt
 //        );
-        double T = GEO::Geom::triangle_area(U_pow[0][1].data(),
-                                            U_pow[1][1].data(),
-                                            U_pow[2][1].data(),
-                                            m_dim);
+
+        GEO::vecng<3, double> dTdU1, dTdU2, dTdU3;
+        std::vector<double> U1_tmp, U2_tmp, U3_tmp, dTdU1_vec, dTdU2_vec, dTdU3_vec;
+//        U1_tmp.resize(m_dim);
+//        U2_tmp.resize(m_dim);
+//        U3_tmp.resize(m_dim);
+        dTdU1_vec.resize(m_dim);
+        dTdU2_vec.resize(m_dim);
+        dTdU3_vec.resize(m_dim);
+//        for (auto i = 0; i < m_dim; i++) {
+//            U1_tmp[i] = U_pow[0][1][i];
+//            U2_tmp[i] = U_pow[1][1][i];
+//            U3_tmp[i] = U_pow[2][1][i];
+//        }
+
+        double T = grad_tri(m_dim,
+                            U_pow[0][1].data(),
+                            U_pow[1][1].data(),
+                            U_pow[2][1].data(),
+                            dTdU1_vec,
+                            dTdU2_vec,
+                            dTdU3_vec);
+
+        for (auto i = 0; i < m_dim; i++) {
+            dTdU1[i] = dTdU1_vec[i];
+            dTdU2[i] = dTdU2_vec[i];
+            dTdU3[i] = dTdU3_vec[i];
+        }
 
         // Assemble dF = E.d|T| + |T|.dE
         GEO::vec3 dFdU1, dFdU2, dFdU3, dFdp1, dFdp2, dFdp3;
@@ -235,7 +263,11 @@ namespace LpCVT {
     }
 
     double
-    LpCVTIS::grad_tri(const GEO::vec3 &U1, const GEO::vec3 &U2, const GEO::vec3 &U3, GEO::vec3 &dTdU1, GEO::vec3 &dTdU2,
+    LpCVTIS::grad_tri(const GEO::vec3 &U1,
+                      const GEO::vec3 &U2,
+                      const GEO::vec3 &U3,
+                      GEO::vec3 &dTdU1,
+                      GEO::vec3 &dTdU2,
                       GEO::vec3 &dTdU3) {
         GEO::vec3 N = cross(U1 - U3, U2 - U3);
         double T = length(N);
@@ -250,6 +282,61 @@ namespace LpCVT {
             dTdU3 = cross(N, U2 - U1);
         }
         return T;
+    }
+
+    double LpCVTIS::grad_tri(unsigned int dim,
+                             const double *U1,
+                             const double *U2,
+                             const double *U3,
+                             std::vector<double> &dTdU1,
+                             std::vector<double> &dTdU2,
+                             std::vector<double> &dTdU3) {
+        stan::math::ChainableStack stack_;
+        Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> U1_vec(dim);
+        Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> U2_vec(dim);
+        Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> U3_vec(dim);
+        U1_vec.setZero();
+        U2_vec.setZero();
+        U3_vec.setZero();
+
+        for (auto i = 0; i < dim; i++) {
+            U1_vec(i) = U1[i];
+            U2_vec(i) = U2[i];
+            U3_vec(i) = U3[i];
+        }
+        stan::math::var a = stan::math::distance(U1_vec, U2_vec);
+        stan::math::var b = stan::math::distance(U2_vec, U3_vec);
+        stan::math::var c = stan::math::distance(U3_vec, U1_vec);
+
+        stan::math::var s = double(0.5) * (a + b + c);
+        stan::math::var A2 = s * (s - a) * (s - b) * (s - c);
+
+        if (A2 < 0.0) {
+            for (auto i = 0; i < dim; i++) {
+                dTdU1[i] = 0.0;
+                dTdU2[i] = 0.0;
+                dTdU3[i] = 0.0;
+            }
+            return 0.0;
+        }
+
+        stan::math::var A = stan::math::sqrt(A2);
+        Eigen::Matrix<double, 1, Eigen::Dynamic> dAdU1(dim);
+        Eigen::Matrix<double, 1, Eigen::Dynamic> dAdU2(dim);
+        Eigen::Matrix<double, 1, Eigen::Dynamic> dAdU3(dim);
+
+        A.grad();
+        dAdU1 = U1_vec.adj();
+        dAdU2 = U2_vec.adj();
+        dAdU3 = U3_vec.adj();
+
+        for (auto i = 0; i < dim; i++) {
+            dTdU1[i] = dAdU1(i);
+            dTdU2[i] = dAdU2(i);
+            dTdU3[i] = dAdU3(i);
+        }
+
+        return A.val();
     }
 
     void LpCVTIS::vecmul(const double *p1, const double *p2, double *to) {
