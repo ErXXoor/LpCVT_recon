@@ -7,7 +7,6 @@
 
 #include <geogram/voronoi/integration_simplex.h>
 #include <geogram/mesh/mesh_AABB.h>
-#include <mutex>
 
 namespace LpCVT {
     class LpCVTIS : public GEO::IntegrationSimplex {
@@ -34,6 +33,7 @@ namespace LpCVT {
         double grad_tri(const GEO::vec3 &U1, const GEO::vec3 &U2, const GEO::vec3 &U3,
                         GEO::vec3 &dTdU1, GEO::vec3 &dTdU2, GEO::vec3 &dTdU3);
 
+        //Don't want to expose Eigen
         double grad_tri(unsigned int dim,
                         const double *U1,
                         const double *U2,

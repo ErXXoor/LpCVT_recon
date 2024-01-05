@@ -101,15 +101,26 @@ namespace LpCVT {
             GEO::index_t v_adj
     ) {
         // Compute normal of the triangle
-        auto p1_vec8 = GEO::vecng<3, double>(p1.point());
-        auto p2_vec8 = GEO::vecng<3, double>(p2.point());
-        auto p3_vec8 = GEO::vecng<3, double>(p3.point());
+        auto p0 = vertex_ptr(v);
+        Eigen::VectorXd p1_vec, p2_vec, p3_vec, p0_vec;
+        p1_vec.resize(m_dim);
+        p2_vec.resize(m_dim);
+        p3_vec.resize(m_dim);
+        p0_vec.resize(m_dim);
+        for (auto i = 0; i < m_dim; i++) {
+            p1_vec[i] = p1.point()[i];
+            p2_vec[i] = p2.point()[i];
+            p3_vec[i] = p3.point()[i];
+            p0_vec[i] = p0[i];
+        }
 
-        auto p1_vec3 = GEO::vec3(p1.point()[0], p1.point()[1], p1.point()[2]);
-        auto p2_vec3 = GEO::vec3(p2.point()[0], p2.point()[1], p2.point()[2]);
-        auto p3_vec3 = GEO::vec3(p3.point()[0], p3.point()[1], p3.point()[2]);
+        auto p1_vec3 = Eigen::Vector3d(p1.point()[0], p1.point()[1], p1.point()[2]);
+        auto p2_vec3 = Eigen::Vector3d(p2.point()[0], p2.point()[1], p2.point()[2]);
+        auto p3_vec3 = Eigen::Vector3d(p3.point()[0], p3.point()[1], p3.point()[2]);
 
-        GEO::vec3 N = normalize(cross(p2_vec3 - p1_vec3, p3_vec3 - p1_vec3));
+        Eigen::Vector3d N = (p2_vec3 - p1_vec3).cross(p3_vec3 - p1_vec3);
+        N.normalize();
+
 //        if (m_facetsAABB != nullptr) {
 //            auto mid = (p1_vec3 + p2_vec3 + p3_vec3) / 3.0;
 //            auto f_id = m_facetsAABB->nearest_facet(mid);
@@ -119,113 +130,81 @@ namespace LpCVT {
 //            }
 //        }
 
-        GEO::mat3 N_mat3;
-        N_mat3(0, 0) = N.x * N.x;
-        N_mat3(0, 1) = N.x * N.y;
-        N_mat3(0, 2) = N.x * N.z;
-        N_mat3(1, 0) = N.y * N.x;
-        N_mat3(1, 1) = N.y * N.y;
-        N_mat3(1, 2) = N.y * N.z;
-        N_mat3(2, 0) = N.z * N.x;
-        N_mat3(2, 1) = N.z * N.y;
-        N_mat3(2, 2) = N.z * N.z;
-        N_mat3 = N_mat3 * 4;
+        Eigen::Matrix3d N_mat3 = N * N.transpose();
+        N_mat3 = N_mat3 * 6;
 
-        GEO::Matrix<3, double> M;
-        M.load_identity();
-        for (auto i = 0; i < 3; i++) {
-            for (auto j = 0; j < 3; j++) {
-                M(i, j) += N_mat3(i, j);
-            }
-        }
+        Eigen::MatrixXd M;
+        M = Eigen::MatrixXd::Identity(m_dim, m_dim);
+        M.block<3, 3>(0, 0) += N_mat3;
 
-        auto p0 = vertex_ptr(v);
-        std::vector<std::vector<GEO::vecng<3, double>>> U_pow;
-        std::vector<double> init_8d(3, 1.0);
+
+        std::vector<std::vector<Eigen::VectorXd>> U_pow;
         U_pow.resize(3);
         U_pow[0].resize(m_degree + 1);
         U_pow[1].resize(m_degree + 1);
         U_pow[2].resize(m_degree + 1);
-        U_pow[0][0] = GEO::vecng<3, double>(init_8d.data());
-        U_pow[1][0] = GEO::vecng<3, double>(init_8d.data());
-        U_pow[2][0] = GEO::vecng<3, double>(init_8d.data());
+        U_pow[0][0] = Eigen::VectorXd::Ones(m_dim);
+        U_pow[1][0] = Eigen::VectorXd::Ones(m_dim);
+        U_pow[2][0] = Eigen::VectorXd::Ones(m_dim);
 
-        std::vector<double> u0;
-        std::vector<double> u1;
-        std::vector<double> u2;
-        for (GEO::index_t c = 0; c < m_dim; c++) {
-            u0.push_back(p1[c] - p0[c]);
-            u1.push_back(p2[c] - p0[c]);
-            u2.push_back(p3[c] - p0[c]);
-        }
-
-        mult(M, u0.data(), U_pow[0][1].data());
-        mult(M, u1.data(), U_pow[1][1].data());
-        mult(M, u2.data(), U_pow[2][1].data());
+        Eigen::VectorXd u0 = p1_vec - p0_vec;
+        Eigen::VectorXd u1 = p2_vec - p0_vec;
+        Eigen::VectorXd u2 = p3_vec - p0_vec;
+        U_pow[0][1] = M * u0;
+        U_pow[1][1] = M * u1;
+        U_pow[2][1] = M * u2;
 
         for (unsigned int i = 2; i <= m_degree; i++) {
-            vecmul(U_pow[0][1].data(), U_pow[0][i - 1].data(), U_pow[0][i].data());
-            vecmul(U_pow[1][1].data(), U_pow[1][i - 1].data(), U_pow[1][i].data());
-            vecmul(U_pow[2][1].data(), U_pow[2][i - 1].data(), U_pow[2][i].data());
+            U_pow[0][i] = U_pow[0][1].cwiseProduct(U_pow[0][i - 1]);
+            U_pow[1][i] = U_pow[1][1].cwiseProduct(U_pow[1][i - 1]);
+            U_pow[2][i] = U_pow[2][1].cwiseProduct(U_pow[2][i - 1]);
         }
 
         // Computation of function value.
         double E = 0.0;
         for (unsigned int i = 0; i < nb_coeffs; i++) {
-            GEO::vecng<3, double> W;
+            Eigen::VectorXd W;
             unsigned int alpha = E_pow[i][0];
             unsigned int beta = E_pow[i][1];
             unsigned int gamma = E_pow[i][2];
-            vecmul(U_pow[0][alpha].data(), U_pow[1][beta].data(), U_pow[2][gamma].data(), W.data());
-            E += vecbar(W.data());
+            W = U_pow[0][alpha].cwiseProduct(U_pow[1][beta]).cwiseProduct(U_pow[2][gamma]);
+            E += W.sum();
         }
 
         // Computation of gradient
-        std::vector<double> dE_init(3, 0.0);
-        GEO::vecng<3, double> dEdU1(dE_init.data()), dEdU2(dE_init.data()), dEdU3(dE_init.data());
+        Eigen::VectorXd dEdU1, dEdU2, dEdU3;
+        dEdU1.setZero(m_dim);
+        dEdU2.setZero(m_dim);
+        dEdU3.setZero(m_dim);
         for (unsigned int i = 0; i < nb_dcoeffs; i++) {
             {
                 unsigned int alpha = dE_pow[0][i][0];
                 unsigned int beta = dE_pow[0][i][1];
                 unsigned int gamma = dE_pow[0][i][2];
-                vecmadd(alpha, U_pow[0][alpha - 1].data(), U_pow[1][beta].data(), U_pow[2][gamma].data(), dEdU1.data());
+                dEdU1 += alpha * U_pow[0][alpha - 1].cwiseProduct(U_pow[1][beta]).cwiseProduct(U_pow[2][gamma]);
             }
             {
                 unsigned int alpha = dE_pow[1][i][0];
                 unsigned int beta = dE_pow[1][i][1];
                 unsigned int gamma = dE_pow[1][i][2];
-                vecmadd(beta, U_pow[0][alpha].data(), U_pow[1][beta - 1].data(), U_pow[2][gamma].data(), dEdU2.data());
+                dEdU2 += beta * U_pow[0][alpha].cwiseProduct(U_pow[1][beta - 1]).cwiseProduct(U_pow[2][gamma]);
+
             }
             {
                 unsigned int alpha = dE_pow[2][i][0];
                 unsigned int beta = dE_pow[2][i][1];
                 unsigned int gamma = dE_pow[2][i][2];
-                vecmadd(gamma, U_pow[0][alpha].data(), U_pow[1][beta].data(), U_pow[2][gamma - 1].data(), dEdU3.data());
+                dEdU3 += gamma * U_pow[0][alpha].cwiseProduct(U_pow[1][beta]).cwiseProduct(U_pow[2][gamma - 1]);
             }
         }
 
         // Compute tet measure and its
         // derivatives relative to U1, U2 and U3.
 
-//        GEO::vecng<3, double> dTdU1_gt, dTdU2_gt, dTdU3_gt;
-//        double T_gt = grad_tri(
-//                U_pow[0][1], U_pow[1][1], U_pow[2][1],
-//                dTdU1_gt, dTdU2_gt, dTdU3_gt
-//        );
-
-        GEO::vecng<3, double> dTdU1, dTdU2, dTdU3;
-        std::vector<double> U1_tmp, U2_tmp, U3_tmp, dTdU1_vec, dTdU2_vec, dTdU3_vec;
-//        U1_tmp.resize(m_dim);
-//        U2_tmp.resize(m_dim);
-//        U3_tmp.resize(m_dim);
+        std::vector<double> dTdU1_vec, dTdU2_vec, dTdU3_vec;
         dTdU1_vec.resize(m_dim);
         dTdU2_vec.resize(m_dim);
         dTdU3_vec.resize(m_dim);
-//        for (auto i = 0; i < m_dim; i++) {
-//            U1_tmp[i] = U_pow[0][1][i];
-//            U2_tmp[i] = U_pow[1][1][i];
-//            U3_tmp[i] = U_pow[2][1][i];
-//        }
 
         double T = grad_tri(m_dim,
                             U_pow[0][1].data(),
@@ -235,30 +214,22 @@ namespace LpCVT {
                             dTdU2_vec,
                             dTdU3_vec);
 
-        for (auto i = 0; i < m_dim; i++) {
-            dTdU1[i] = dTdU1_vec[i];
-            dTdU2[i] = dTdU2_vec[i];
-            dTdU3[i] = dTdU3_vec[i];
-        }
+        Eigen::Map<Eigen::VectorXd> dTdU1(dTdU1_vec.data(), dTdU1_vec.size());
+        Eigen::Map<Eigen::VectorXd> dTdU2(dTdU2_vec.data(), dTdU2_vec.size());
+        Eigen::Map<Eigen::VectorXd> dTdU3(dTdU3_vec.data(), dTdU3_vec.size());
+
 
         // Assemble dF = E.d|T| + |T|.dE
-        GEO::vec3 dFdU1, dFdU2, dFdU3, dFdp1, dFdp2, dFdp3;
-        vecmadd(E, dTdU1, T, dEdU1, dFdU1);
-        matTvecmul(M, dFdU1, dFdp1);
-        vecmadd(E, dTdU2, T, dEdU2, dFdU2);
-        matTvecmul(M, dFdU2, dFdp2);
-        vecmadd(E, dTdU3, T, dEdU3, dFdU3);
-        matTvecmul(M, dFdU3, dFdp3);
+        Eigen::VectorXd dFdU1, dFdU2, dFdU3, dFdp1, dFdp2, dFdp3;
+        dFdp1 = M * (E * dTdU1 + T * dEdU1);
+        dFdp2 = M * (E * dTdU2 + T * dEdU2);
+        dFdp3 = M * (E * dTdU3 + T * dEdU3);
 
-        g_[3 * v + 0] += -dFdp1.x - dFdp2.x - dFdp3.x;
-        g_[3 * v + 1] += -dFdp1.y - dFdp2.y - dFdp3.y;
-        g_[3 * v + 2] += -dFdp1.z - dFdp2.z - dFdp3.z;
+        for (auto i = 0; i < m_dim; i++) {
+            g_[m_dim * v + i] += -dFdp1[i] - dFdp2[i] - dFdp3[i];
+        }
 
         double f = T * E;
-//        for(index_t c = 0; c < m_dim; c++) {
-//            double Gc = (1.0 / 3.0) * (p1[c] + p2[c] + p3[c]);
-//            g_[m_dim * v + c] += (2.0 * t_area) * (p0[c] - Gc);
-//        }
         return f;
     }
 
