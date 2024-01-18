@@ -33,6 +33,15 @@ namespace LpCVT {
         double grad_tri(const GEO::vec3 &U1, const GEO::vec3 &U2, const GEO::vec3 &U3,
                         GEO::vec3 &dTdU1, GEO::vec3 &dTdU2, GEO::vec3 &dTdU3);
 
+        //Don't want to expose Eigen
+        double grad_tri(unsigned int dim,
+                        const double *U1,
+                        const double *U2,
+                        const double *U3,
+                        std::vector<double> &dTdU1,
+                        std::vector<double> &dTdU2,
+                        std::vector<double> &dTdU3);
+
         //Utils
         void vecmul(const double *p1, const double *p2, double *to);
 
@@ -46,8 +55,9 @@ namespace LpCVT {
 
         void matTvecmul(const GEO::mat3 &M, const GEO::vec3 &U, GEO::vec3 &V);
 
+
     private:
-        unsigned int m_dim;
+        const unsigned int m_dim;
         unsigned int m_degree;
         unsigned int nb_coeffs;
         unsigned int nb_dcoeffs;

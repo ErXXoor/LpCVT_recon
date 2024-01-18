@@ -58,10 +58,18 @@ namespace LpCVT {
         m_cvt->RVD()->compute_RVD(M_out, 3);
     }
 
-    void Remesher::GetRDT(GEO::Mesh &M_out) {
+    void Remesher::GetRDT(GEO::Mesh &M_out, bool post_process) {
         GEO::Logger::div("Generate RDT");
-        m_cvt->RVD()->set_exact_predicates(true);
-        m_cvt->RVD()->compute_RDT(M_out, GEO::RestrictedVoronoiDiagram::RDT_RVC_CENTROIDS);
+
+        if (post_process) {
+            m_cvt->compute_surface(&M_out, true);
+        } else {
+            m_cvt->RVD()->set_exact_predicates(true);
+            auto mode_i = GEO::RestrictedVoronoiDiagram::RDT_RVC_CENTROIDS |
+                          GEO::RestrictedVoronoiDiagram::RDT_PREFER_SEEDS;
+            auto mode = GEO::RestrictedVoronoiDiagram::RDTMode(mode_i);
+            m_cvt->RVD()->compute_RDT(M_out, mode);
+        }
     }
 
 }
