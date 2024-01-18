@@ -6,8 +6,8 @@
 #include <geogram/basic/smart_pointer.h>
 #include <geogram/basic/geometry_nd.h>
 #include <stan/math.hpp>
-#include <thread>
 #include <stan/math/rev/core/chainablestack.hpp>
+#include <geogram/basic/logger.h>
 
 namespace LpCVT {
 
@@ -121,17 +121,19 @@ namespace LpCVT {
         Eigen::Vector3d N = (p2_vec3 - p1_vec3).cross(p3_vec3 - p1_vec3);
         N.normalize();
 
-//        if (m_facetsAABB != nullptr) {
-//            auto mid = (p1_vec3 + p2_vec3 + p3_vec3) / 3.0;
-//            auto f_id = m_facetsAABB->nearest_facet(mid);
-//            auto f_n = GEO::vec3(m_face_normal[3 * f_id], m_face_normal[3 * f_id + 1], m_face_normal[3 * f_id + 2]);
-//            if (dot(N, f_n) < 0) {
-//                N = -N;
-//            }
-//        }
+        if (m_facetsAABB != nullptr) {
+            auto mid_tmp = (p1_vec3 + p2_vec3 + p3_vec3) / 3.0;
+            auto mid = GEO::vec3(mid_tmp[0], mid_tmp[1], mid_tmp[2]);
+            auto f_id = m_facetsAABB->nearest_facet(mid);
+            auto f_n = GEO::vec3(m_face_normal[3 * f_id], m_face_normal[3 * f_id + 1], m_face_normal[3 * f_id + 2]);
+            auto N_tmp = GEO::vec3(N[0], N[1], N[2]);
+            if (dot(N_tmp, f_n) < 0) {
+                N = -N;
+            }
+        }
 
         Eigen::Matrix3d N_mat3 = N * N.transpose();
-        N_mat3 = N_mat3 * 6;
+        N_mat3 = N_mat3 * 2;
 
         Eigen::MatrixXd M;
         M = Eigen::MatrixXd::Identity(m_dim, m_dim);
@@ -213,17 +215,22 @@ namespace LpCVT {
                             dTdU1_vec,
                             dTdU2_vec,
                             dTdU3_vec);
-
         Eigen::Map<Eigen::VectorXd> dTdU1(dTdU1_vec.data(), dTdU1_vec.size());
         Eigen::Map<Eigen::VectorXd> dTdU2(dTdU2_vec.data(), dTdU2_vec.size());
         Eigen::Map<Eigen::VectorXd> dTdU3(dTdU3_vec.data(), dTdU3_vec.size());
 
+//        T = 2 * T;
+//        dTdU1 = 2 * dTdU1;
+//        dTdU2 = 2 * dTdU2;
+//        dTdU3 = 2 * dTdU3;
 
         // Assemble dF = E.d|T| + |T|.dE
+        // Rem: anisotropy matrix needs to be transposed
+        // grad(F(MX)) = J(F(MX))^T = (gradF^T M)^T = M^T grad F
         Eigen::VectorXd dFdU1, dFdU2, dFdU3, dFdp1, dFdp2, dFdp3;
-        dFdp1 = M * (E * dTdU1 + T * dEdU1);
-        dFdp2 = M * (E * dTdU2 + T * dEdU2);
-        dFdp3 = M * (E * dTdU3 + T * dEdU3);
+        dFdp1 = M.transpose() * (E * dTdU1 + T * dEdU1);
+        dFdp2 = M.transpose() * (E * dTdU2 + T * dEdU2);
+        dFdp3 = M.transpose() * (E * dTdU3 + T * dEdU3);
 
         for (auto i = 0; i < m_dim; i++) {
             g_[m_dim * v + i] += -dFdp1[i] - dFdp2[i] - dFdp3[i];
@@ -281,14 +288,16 @@ namespace LpCVT {
 
         stan::math::var s = double(0.5) * (a + b + c);
         stan::math::var A2 = s * (s - a) * (s - b) * (s - c);
+//        A2 = stan::math::if_else(stan::math::fabs(A2) < 1e-10, 0.0, A2);
 
-        if (A2 < 0.0) {
+        if (A2 < 1e-10) {
             for (auto i = 0; i < dim; i++) {
                 dTdU1[i] = 0.0;
                 dTdU2[i] = 0.0;
                 dTdU3[i] = 0.0;
             }
-            return 0.0;
+            A2 = stan::math::if_else(A2 < 0.0, 0.0, A2);
+            return stan::math::sqrt(A2).val();
         }
 
         stan::math::var A = stan::math::sqrt(A2);

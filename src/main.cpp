@@ -15,14 +15,14 @@ int main() {
     GEO::CmdLine::import_arg_group("post");
     GEO::CmdLine::import_arg_group("poly");
 
-    std::string input_filename = "/Users/lihongbo/Desktop/code/LpCVT_recon/tmp/datatech_1_input.obj";
-    std::string hd_filename = "/Users/lihongbo/Desktop/code/LpCVT_recon/tmp/126660_best_emb_out.obj";
-    std::string output_filename = "/Users/lihongbo/Desktop/code/LpCVT_recon/result/126660_tri_neural.obj";
+    std::string input_filename = "/Users/lihongbo/Desktop/code/LpCVT_recon/tmp/octa_flower_input.obj";
+    std::string hd_filename = "/Users/lihongbo/Downloads/research/tmp/32770_emb.obj";
+    std::string output_filename = "/Users/lihongbo/Downloads/research/tmp/32770_optr_tri.obj";
     const int dim = 8;
 
     std::shared_ptr<LpCVT::Mesh> mesh = std::make_shared<LpCVT::Mesh>();
     mesh->LoadMesh(input_filename);
-    mesh->CalculateFaceNormal();
+//    mesh->CalculateFaceNormal();
 
     GEO::Mesh M_3d;
     LpCVT::MeshAdaptor::Convert(*mesh, M_3d);
@@ -32,9 +32,9 @@ int main() {
 
     LpCVT::Remesher remesher;
     remesher.Init(M_hd, dim, LpCVT::Remesher::RemeshType::LPCVT);
-    remesher.Remeshing(20000, 400);
+    remesher.Remeshing(4200, 400);
     GEO::Mesh M_out;
-    remesher.GetRDT(M_out);
+    remesher.GetRDT(M_out, false);
 
     LpCVT::MeshAdaptor::SaveGEOMesh(output_filename, M_out);
 }

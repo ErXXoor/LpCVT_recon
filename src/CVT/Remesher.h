@@ -32,7 +32,7 @@ namespace LpCVT {
 
         void GetRVD(GEO::Mesh &M_out);
 
-        void GetRDT(GEO::Mesh &M_out);
+        void GetRDT(GEO::Mesh &M_out, bool post_process = false);
 
 
     private:
