@@ -20,15 +20,16 @@ int main(int argc, char **argv) {
     std::string output_filename = "";
     int iteration = 400;
     int nb_pts = 7000;
-    const int dim = 3;
+    int dim = 3;
     bool post_process = false;
 
-    if (argc == 6) {
+    if (argc == 7) {
         input_filename = argv[1];
         output_filename = argv[2];
-        iteration = std::stoi(argv[3]);
-        nb_pts = std::stoi(argv[4]);
-        post_process = std::string(argv[5]) == "true";
+        dim = std::stoi(argv[3]);
+        iteration = std::stoi(argv[4]);
+        nb_pts = std::stoi(argv[5]);
+        post_process = std::string(argv[6]) == "true";
     } else {
         input_filename = "/Users/lihongbo/Desktop/code/LpCVT_recon/tmp/octa_flower_input.obj";
         output_filename = "/Users/lihongbo/Desktop/code/LpCVT_recon/result/octa_flower_tri.obj";
@@ -36,7 +37,7 @@ int main(int argc, char **argv) {
 
     GEO::Mesh M;
     if (dim == 3) {
-        std::shared_ptr <LpCVT::Mesh> mesh = std::make_shared<LpCVT::Mesh>();
+        std::shared_ptr<LpCVT::Mesh> mesh = std::make_shared<LpCVT::Mesh>();
         mesh->LoadMesh(input_filename);
         LpCVT::MeshAdaptor::Convert(*mesh, M);
     } else {
