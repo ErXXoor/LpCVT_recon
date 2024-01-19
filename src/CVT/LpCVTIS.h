@@ -7,7 +7,7 @@
 
 #include <geogram/voronoi/integration_simplex.h>
 #include <geogram/mesh/mesh_AABB.h>
-
+#include <memory>
 namespace LpCVT {
     class LpCVTIS : public GEO::IntegrationSimplex {
     public:

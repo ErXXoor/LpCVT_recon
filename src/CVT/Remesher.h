@@ -9,6 +9,7 @@
 #include <geogram/voronoi/integration_simplex.h>
 #include "CVT/LpCVTWrap.h"
 #include <geogram/mesh/mesh_AABB.h>
+#include <memory>
 
 namespace LpCVT {
     class Remesher {

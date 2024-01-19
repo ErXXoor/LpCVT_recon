@@ -6,7 +6,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(stanmath)
 
-find_package(Boost 1.81.0 REQUIRED)
+find_package(Boost REQUIRED)
 find_package(TBB 2021 REQUIRED)
 find_package(Eigen3 3.4.0 REQUIRED)
 option(BUILD_TESTING OFF)
@@ -15,5 +15,14 @@ option(EIGEN_BUILD_PKGCONFIG OFF)
 add_library(stan-math INTERFACE)
 target_compile_definitions(stan-math INTERFACE NO_FPRINTF_OUTPUT BOOST_DISABLE_ASSERTS TBB_INTERFACE_NEW _REENTRANT STAN_MATH_REV_CORE_INIT_CHAINABLESTACK_HPP STAN_THREADS)
 target_link_libraries(stan-math INTERFACE Eigen3::Eigen TBB::tbb -lstdc++ -lm)
+if (UNIX)
+    FetchContent_Declare(
+            sundials
+            GIT_REPOSITORY https://github.com/LLNL/sundials
+            GIT_TAG v6.5.1
+    )
+    FetchContent_MakeAvailable(sundials)
+    target_link_libraries(stan-math INTERFACE sundials_kinsol sundials_cvodes)
+endif ()
 target_include_directories(stan-math INTERFACE ${stanmath_SOURCE_DIR} ${Boost_INCLUDE_DIRS})
 add_library(stan::math ALIAS stan-math)
