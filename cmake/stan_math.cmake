@@ -18,7 +18,7 @@ target_link_libraries(stan-math INTERFACE Eigen3::Eigen TBB::tbb -lstdc++ -lm)
 if (UNIX)
     FetchContent_Declare(
             sundials
-            GIT_REPOSITORY https://github.com/LLNL/sundials
+            GIT_REPOSITORY https://github.com/LLNL/sundials.git
             GIT_TAG v6.5.1
     )
     FetchContent_MakeAvailable(sundials)

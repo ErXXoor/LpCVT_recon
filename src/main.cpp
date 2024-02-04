@@ -16,11 +16,11 @@ int main(int argc, char **argv) {
     GEO::CmdLine::import_arg_group("post");
     GEO::CmdLine::import_arg_group("poly");
 
-    std::string input_filename = "";
-    std::string output_filename = "";
+    std::string input_filename;
+    std::string output_filename;
     int iteration = 400;
-    int nb_pts = 7000;
-    int dim = 3;
+    int nb_pts = 1564;
+    int dim = 8;
     bool post_process = false;
 
     if (argc == 7) {
@@ -31,8 +31,10 @@ int main(int argc, char **argv) {
         nb_pts = std::stoi(argv[5]);
         post_process = std::string(argv[6]) == "true";
     } else {
-        input_filename = "/Users/lihongbo/Desktop/code/LpCVT_recon/tmp/octa_flower_input.obj";
-        output_filename = "/Users/lihongbo/Desktop/code/LpCVT_recon/result/octa_flower_tri.obj";
+        input_filename = "/media/hongbo/45ad552c-e83b-4f01-9864-7d87cfa1377e/hongbo/Thing10k_tetwild/hd_output_opt/237739/237739_emb.obj";
+        output_filename = "/home/hongbo/Desktop/code/LpCVT_recon/tmp/237739_tri.obj";
+//        std::cout<<"Parameter length error"<<std::endl;
+//        return 0;
     }
 
     GEO::Mesh M;
