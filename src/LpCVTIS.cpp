@@ -133,12 +133,12 @@ namespace LpCVT {
         }
 
         Eigen::Matrix3d N_mat3 = N * N.transpose();
-        N_mat3 = N_mat3 * 2;
+        N_mat3 = N_mat3 * 6;
 
         Eigen::MatrixXd M;
         M = Eigen::MatrixXd::Identity(m_dim, m_dim);
         M.block<3, 3>(0, 0) += N_mat3;
-
+//        M = M*2;
 
         std::vector<std::vector<Eigen::VectorXd>> U_pow;
         U_pow.resize(3);
