@@ -8,7 +8,11 @@
 #include <geogram/basic/smart_pointer.h>
 
 namespace LpCVT {
-    void Remesher::Init(const GEO::Mesh &M_in, GEO::coord_index_t dim, RemeshType type) {
+    void Remesher::Init(const GEO::Mesh &M_in,
+                        GEO::coord_index_t dim,
+                        unsigned int degree,
+                        double metric_weight,
+                        RemeshType type) {
         GEO::Logger::div("CVT meshing");
         GEO::Mesh *mesh = new GEO::Mesh();
         mesh->copy(M_in);
@@ -23,10 +27,10 @@ namespace LpCVT {
         m_cvt->set_volumetric(false);
 
         if (type <= RemeshType::LPCVT) {
-            m_is = new LpCVTIS(*mesh, false, dim, 2);
+            m_is = new LpCVTIS(*mesh, false, dim, degree, metric_weight);
             m_cvt->set_simplex_func(m_is);
         } else if (type == RemeshType::LPCVT_NORMAL) {
-            GEO::SmartPointer<LpCVTIS> is = new LpCVTIS(*mesh, false, dim, 2);
+            GEO::SmartPointer<LpCVTIS> is = new LpCVTIS(*mesh, false, dim, degree, metric_weight);
             is->set_facetsAABB(m_facetsAABB);
             m_is = is;
             m_cvt->set_simplex_func(m_is);
@@ -34,7 +38,9 @@ namespace LpCVT {
 
     }
 
-    void Remesher::Remeshing(unsigned int nb_pts, unsigned int nb_iter) {
+    void Remesher::Remeshing(unsigned int nb_pts,
+                             unsigned int nb_iter) {
+        GEO::Logger::div("Set metric weight");
         GEO::Logger::div("Generate random samples");
 
         m_cvt->compute_initial_sampling(nb_pts);

@@ -15,7 +15,8 @@ namespace LpCVT {
     LpCVTIS::LpCVTIS(const GEO::Mesh &mesh,
                      bool volumetric,
                      unsigned int dim,
-                     unsigned int degree) :
+                     unsigned int degree,
+                     double metric_weight) :
             IntegrationSimplex(mesh,
                                volumetric,
                                0,
@@ -25,6 +26,8 @@ namespace LpCVT {
         m_degree = degree;
         nb_coeffs = ((m_degree + 1) * (m_degree + 2)) / 2;
         nb_dcoeffs = nb_coeffs - (m_degree + 1);
+        m_metric_weight = metric_weight;
+
         // Pre-compute indices for evaluating F_{L_p}^T
         // (see Appendix A)
         {
@@ -89,6 +92,14 @@ namespace LpCVT {
             return;
         }
         m_facetsAABB = facetsAABB;
+        auto aaa = m_facetsAABB->mesh()->facets.nb();
+        for (auto i = 0; i < m_facetsAABB->mesh()->facets.nb(); i++) {
+            m_vertices.push_back(
+                    {*(m_facetsAABB->mesh()->vertices.point_ptr(m_facetsAABB->mesh()->facets.vertex(i, 0))),
+                     *(m_facetsAABB->mesh()->vertices.point_ptr(m_facetsAABB->mesh()->facets.vertex(i, 1))),
+                     *(m_facetsAABB->mesh()->vertices.point_ptr(m_facetsAABB->mesh()->facets.vertex(i, 2)))});
+        }
+        auto bbb = 0;
     }
 
     double LpCVTIS::eval(
@@ -125,6 +136,17 @@ namespace LpCVT {
             auto mid_tmp = (p1_vec3 + p2_vec3 + p3_vec3) / 3.0;
             auto mid = GEO::vec3(mid_tmp[0], mid_tmp[1], mid_tmp[2]);
             auto f_id = m_facetsAABB->nearest_facet(mid);
+
+            auto a = Eigen::Vector3d(m_vertices[f_id][0],
+                                     m_vertices[f_id][1],
+                                     m_vertices[3 * f_id][2]);
+            auto b = Eigen::Vector3d(m_vertices[3 * f_id + 1][0],
+                                     m_vertices[3 * f_id + 1][1],
+                                     m_vertices[3 * f_id + 1][2]);
+            auto c = Eigen::Vector3d(m_vertices[3 * f_id + 2][0],
+                                     m_vertices[3 * f_id + 2][1],
+                                     m_vertices[3 * f_id + 2][2]);
+
             auto f_n = GEO::vec3(m_face_normal[3 * f_id], m_face_normal[3 * f_id + 1], m_face_normal[3 * f_id + 2]);
             auto N_tmp = GEO::vec3(N[0], N[1], N[2]);
             if (dot(N_tmp, f_n) < 0) {
@@ -133,12 +155,11 @@ namespace LpCVT {
         }
 
         Eigen::Matrix3d N_mat3 = N * N.transpose();
-        N_mat3 = N_mat3 * 6;
+        N_mat3 = N_mat3 * m_metric_weight;
 
         Eigen::MatrixXd M;
         M = Eigen::MatrixXd::Identity(m_dim, m_dim);
-        M.block<3, 3>(0, 0) += N_mat3;
-//        M = M*2;
+//        M.block<3, 3>(0, 0) += N_mat3;
 
         std::vector<std::vector<Eigen::VectorXd>> U_pow;
         U_pow.resize(3);
@@ -288,7 +309,6 @@ namespace LpCVT {
 
         stan::math::var s = double(0.5) * (a + b + c);
         stan::math::var A2 = s * (s - a) * (s - b) * (s - c);
-//        A2 = stan::math::if_else(stan::math::fabs(A2) < 1e-10, 0.0, A2);
 
         if (A2 < 1e-10) {
             for (auto i = 0; i < dim; i++) {

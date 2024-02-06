@@ -8,10 +8,12 @@
 #include <geogram/voronoi/integration_simplex.h>
 #include <geogram/mesh/mesh_AABB.h>
 #include <memory>
+
 namespace LpCVT {
     class LpCVTIS : public GEO::IntegrationSimplex {
     public:
-        LpCVTIS(const GEO::Mesh &mesh, bool volumetric, unsigned int dim, unsigned int degree);
+        LpCVTIS(const GEO::Mesh &mesh, bool volumetric, unsigned int dim, unsigned int degree,
+                double metric_weight = 6.0);
 
         ~LpCVTIS() override = default;
 
@@ -61,10 +63,12 @@ namespace LpCVT {
         unsigned int m_degree;
         unsigned int nb_coeffs;
         unsigned int nb_dcoeffs;
+        double m_metric_weight;
         std::vector<std::vector<unsigned int>> E_pow;
         std::vector<std::vector<std::vector<unsigned int>>> dE_pow;
         std::shared_ptr<GEO::MeshFacetsAABB> m_facetsAABB = nullptr;
         GEO::Attribute<double> m_face_normal;
+        std::vector<std::vector<double>> m_vertices;
 
     };
 

@@ -19,22 +19,24 @@ int main(int argc, char **argv) {
     std::string input_filename;
     std::string output_filename;
     int iteration = 400;
-    int nb_pts = 1564;
+    int nb_pts = 13435;
     int dim = 8;
+    double metric_weight = 6.0;
+    int degree = 2;
     bool post_process = false;
 
-    if (argc == 7) {
+    if (argc == 9) {
         input_filename = argv[1];
         output_filename = argv[2];
         dim = std::stoi(argv[3]);
         iteration = std::stoi(argv[4]);
         nb_pts = std::stoi(argv[5]);
-        post_process = std::string(argv[6]) == "true";
+        degree = std::stoi(argv[6]);
+        metric_weight = std::stod(argv[7]);
+        post_process = std::string(argv[8]) == "true";
     } else {
-        input_filename = "/media/hongbo/45ad552c-e83b-4f01-9864-7d87cfa1377e/hongbo/Thing10k_tetwild/hd_output_opt/237739/237739_emb.obj";
-        output_filename = "/home/hongbo/Desktop/code/LpCVT_recon/tmp/237739_tri.obj";
-//        std::cout<<"Parameter length error"<<std::endl;
-//        return 0;
+        std::cout << "Parameter length error" << std::endl;
+        return 0;
     }
 
     GEO::Mesh M;
@@ -47,7 +49,7 @@ int main(int argc, char **argv) {
     }
 
     LpCVT::Remesher remesher;
-    remesher.Init(M, dim, LpCVT::Remesher::RemeshType::LPCVT);
+    remesher.Init(M, dim, degree, metric_weight, LpCVT::Remesher::RemeshType::LPCVT_NORMAL);
     remesher.Remeshing(nb_pts, iteration);
     GEO::Mesh M_out;
     remesher.GetRDT(M_out, post_process);
