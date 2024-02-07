@@ -5,8 +5,10 @@
 #ifndef LPCVT_RECON_LPCVTIS_H
 #define LPCVT_RECON_LPCVTIS_H
 
+#include <stan/math.hpp>
 #include <geogram/voronoi/integration_simplex.h>
 #include <geogram/mesh/mesh_AABB.h>
+#include "Base/Mesh.h"
 #include <memory>
 
 namespace LpCVT {
@@ -19,7 +21,11 @@ namespace LpCVT {
 
         const double *vertex_ptr(GEO::index_t v) const;
 
+        void CalQuadMetric();
+
         void set_facetsAABB(std::shared_ptr<GEO::MeshFacetsAABB> facetsAABB);
+
+        void set_mesh(std::shared_ptr<Mesh> mesh);
 
         double eval(
                 GEO::index_t center_vertex_index,
@@ -67,8 +73,10 @@ namespace LpCVT {
         std::vector<std::vector<unsigned int>> E_pow;
         std::vector<std::vector<std::vector<unsigned int>>> dE_pow;
         std::shared_ptr<GEO::MeshFacetsAABB> m_facetsAABB = nullptr;
-        GEO::Attribute<double> m_face_normal;
+        std::shared_ptr<Mesh> m_mesh;
+        std::vector<std::vector<unsigned int>> m_vertices_id;
         std::vector<std::vector<double>> m_vertices;
+        std::vector<Eigen::Matrix3d> m_quad_metric;
 
     };
 

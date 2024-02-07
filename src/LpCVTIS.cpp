@@ -5,7 +5,6 @@
 #include <geogram/voronoi/generic_RVD.h>
 #include <geogram/basic/smart_pointer.h>
 #include <geogram/basic/geometry_nd.h>
-#include <stan/math.hpp>
 #include <stan/math/rev/core/chainablestack.hpp>
 #include <geogram/basic/logger.h>
 
@@ -86,21 +85,46 @@ namespace LpCVT {
             std::cerr << "facetsAABB is nullptr" << std::endl;
             return;
         }
-        m_face_normal.bind_if_is_defined(facetsAABB->mesh()->facets.attributes(), "normal");
-        if (!m_face_normal.is_bound() || m_face_normal.dimension() != 3) {
-            std::cerr << "normal is not bound" << std::endl;
-            return;
-        }
         m_facetsAABB = facetsAABB;
-        auto aaa = m_facetsAABB->mesh()->facets.nb();
+
         for (auto i = 0; i < m_facetsAABB->mesh()->facets.nb(); i++) {
-            m_vertices.push_back(
-                    {*(m_facetsAABB->mesh()->vertices.point_ptr(m_facetsAABB->mesh()->facets.vertex(i, 0))),
-                     *(m_facetsAABB->mesh()->vertices.point_ptr(m_facetsAABB->mesh()->facets.vertex(i, 1))),
-                     *(m_facetsAABB->mesh()->vertices.point_ptr(m_facetsAABB->mesh()->facets.vertex(i, 2)))});
+            unsigned int a = m_facetsAABB->mesh()->facets.vertex(i, 0);
+            unsigned int b = m_facetsAABB->mesh()->facets.vertex(i, 1);
+            unsigned int c = m_facetsAABB->mesh()->facets.vertex(i, 2);
+            m_vertices_id.push_back({a, b, c});
+            std::vector<double> vert_a = std::vector<double>(m_facetsAABB->mesh()->vertices.point_ptr(a),
+                                                             m_facetsAABB->mesh()->vertices.point_ptr(a) + 3);
+            std::vector<double> vert_b = std::vector<double>(m_facetsAABB->mesh()->vertices.point_ptr(b),
+                                                             m_facetsAABB->mesh()->vertices.point_ptr(b) + 3);
+            std::vector<double> vert_c = std::vector<double>(m_facetsAABB->mesh()->vertices.point_ptr(c),
+                                                             m_facetsAABB->mesh()->vertices.point_ptr(c) + 3);
+            m_vertices.push_back(vert_a);
+            m_vertices.push_back(vert_b);
+            m_vertices.push_back(vert_c);
         }
-        auto bbb = 0;
     }
+
+    void LpCVTIS::set_mesh(std::shared_ptr<Mesh> mesh) {
+        m_mesh = mesh;
+    }
+
+    void LpCVTIS::CalQuadMetric() {
+        auto min_pd = m_mesh->GetMinPD();
+        auto max_pd = m_mesh->GetMaxPD();
+        auto n = m_mesh->GetVertexNormals();
+
+        for (auto i = 0; i < min_pd.rows(); i++) {
+            Eigen::Matrix3d R;
+            R.row(0) = min_pd.row(i);
+            R.row(1) = max_pd.row(i);
+            R.row(2) = n.row(i);
+            Eigen::Matrix3d S = Eigen::Matrix3d::Identity();
+            S(2, 2) = m_metric_weight;
+            Eigen::Matrix3d M = R.transpose() * S;
+            m_quad_metric.push_back(M);
+        }
+    }
+
 
     double LpCVTIS::eval(
             GEO::index_t v,
@@ -129,37 +153,33 @@ namespace LpCVT {
         auto p2_vec3 = Eigen::Vector3d(p2.point()[0], p2.point()[1], p2.point()[2]);
         auto p3_vec3 = Eigen::Vector3d(p3.point()[0], p3.point()[1], p3.point()[2]);
 
-        Eigen::Vector3d N = (p2_vec3 - p1_vec3).cross(p3_vec3 - p1_vec3);
-        N.normalize();
+
+        Eigen::MatrixXd M = Eigen::MatrixXd::Identity(m_dim, m_dim);
+
 
         if (m_facetsAABB != nullptr) {
             auto mid_tmp = (p1_vec3 + p2_vec3 + p3_vec3) / 3.0;
-            auto mid = GEO::vec3(mid_tmp[0], mid_tmp[1], mid_tmp[2]);
+            auto mid = GEO::vec3(p0_vec[0], p0_vec[1], p0_vec[2]);
             auto f_id = m_facetsAABB->nearest_facet(mid);
+            auto f_v = m_mesh->GetFace(f_id);
+            M = m_quad_metric[f_v[0]] + m_quad_metric[f_v[1]] + m_quad_metric[f_v[2]];
+            M = 1.0 / 3.0 * M;
+//
+//            auto v_id = m_vertices_id[f_id];
+//            auto a = m_vertices[3 * f_id];
+//            auto b = m_vertices[3 * f_id + 1];
+//            auto c = m_vertices[3 * f_id + 2];
 
-            auto a = Eigen::Vector3d(m_vertices[f_id][0],
-                                     m_vertices[f_id][1],
-                                     m_vertices[3 * f_id][2]);
-            auto b = Eigen::Vector3d(m_vertices[3 * f_id + 1][0],
-                                     m_vertices[3 * f_id + 1][1],
-                                     m_vertices[3 * f_id + 1][2]);
-            auto c = Eigen::Vector3d(m_vertices[3 * f_id + 2][0],
-                                     m_vertices[3 * f_id + 2][1],
-                                     m_vertices[3 * f_id + 2][2]);
 
-            auto f_n = GEO::vec3(m_face_normal[3 * f_id], m_face_normal[3 * f_id + 1], m_face_normal[3 * f_id + 2]);
-            auto N_tmp = GEO::vec3(N[0], N[1], N[2]);
-            if (dot(N_tmp, f_n) < 0) {
-                N = -N;
-            }
+        } else {
+            Eigen::Vector3d N = (p2_vec3 - p1_vec3).cross(p3_vec3 - p1_vec3);
+            N.normalize();
+
+            Eigen::Matrix3d N_mat3 = N * N.transpose();
+            N_mat3 = N_mat3 * m_metric_weight;
+
+            M.block<3, 3>(0, 0) += N_mat3;
         }
-
-        Eigen::Matrix3d N_mat3 = N * N.transpose();
-        N_mat3 = N_mat3 * m_metric_weight;
-
-        Eigen::MatrixXd M;
-        M = Eigen::MatrixXd::Identity(m_dim, m_dim);
-//        M.block<3, 3>(0, 0) += N_mat3;
 
         std::vector<std::vector<Eigen::VectorXd>> U_pow;
         U_pow.resize(3);
@@ -239,11 +259,6 @@ namespace LpCVT {
         Eigen::Map<Eigen::VectorXd> dTdU1(dTdU1_vec.data(), dTdU1_vec.size());
         Eigen::Map<Eigen::VectorXd> dTdU2(dTdU2_vec.data(), dTdU2_vec.size());
         Eigen::Map<Eigen::VectorXd> dTdU3(dTdU3_vec.data(), dTdU3_vec.size());
-
-//        T = 2 * T;
-//        dTdU1 = 2 * dTdU1;
-//        dTdU2 = 2 * dTdU2;
-//        dTdU3 = 2 * dTdU3;
 
         // Assemble dF = E.d|T| + |T|.dE
         // Rem: anisotropy matrix needs to be transposed

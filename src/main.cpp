@@ -4,8 +4,10 @@
 #include "Base/MeshAdaptor.h"
 #include "Base/Mesh.h"
 #include "CVT/Remesher.h"
+#include "CVT/LpCVTIS.h"
 #include <geogram/basic/command_line_args.h>
-
+#include <geogram/mesh/mesh_AABB.h>
+#include <geogram/basic/smart_pointer.h>
 
 int main(int argc, char **argv) {
     GEO::initialize();
@@ -39,20 +41,39 @@ int main(int argc, char **argv) {
         return 0;
     }
 
+
     GEO::Mesh M;
+    std::shared_ptr<LpCVT::Mesh> mesh;
     if (dim == 3) {
-        std::shared_ptr<LpCVT::Mesh> mesh = std::make_shared<LpCVT::Mesh>();
+        mesh = std::make_shared<LpCVT::Mesh>();
         mesh->LoadMesh(input_filename);
         LpCVT::MeshAdaptor::Convert(*mesh, M);
     } else {
         LpCVT::MeshAdaptor::HdMeshLoad(input_filename, M, dim);
     }
 
+    GEO::SmartPointer<LpCVT::LpCVTIS> is;
+    auto remesh_type = LpCVT::Remesher::RemeshType::LPCVT_NORMAL;
+    if (remesh_type == LpCVT::Remesher::RemeshType::LPCVT) {
+        is = new LpCVT::LpCVTIS(M, false, dim, degree, metric_weight);
+    } else if (remesh_type == LpCVT::Remesher::RemeshType::LPCVT_NORMAL) {
+        auto facet_aabb = std::make_shared<GEO::MeshFacetsAABB>();
+        facet_aabb->initialize(M, false);
+
+        is = new LpCVT::LpCVTIS(M, false, dim, degree, metric_weight);
+
+        mesh->CalculateCurvature();
+        is->set_mesh(mesh);
+        is->CalQuadMetric();
+        is->set_facetsAABB(facet_aabb);
+    }
+
     LpCVT::Remesher remesher;
-    remesher.Init(M, dim, degree, metric_weight, LpCVT::Remesher::RemeshType::LPCVT_NORMAL);
+    remesher.Init(M, is, dim);
     remesher.Remeshing(nb_pts, iteration);
     GEO::Mesh M_out;
     remesher.GetRDT(M_out, post_process);
 
     LpCVT::MeshAdaptor::SaveGEOMesh(output_filename, M_out);
+
 }

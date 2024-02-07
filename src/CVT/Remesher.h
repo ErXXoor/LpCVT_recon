@@ -10,6 +10,8 @@
 #include "CVT/LpCVTWrap.h"
 #include <geogram/mesh/mesh_AABB.h>
 #include <memory>
+#include <geogram/basic/smart_pointer.h>
+#include "CVT/LpCVTIS.h"
 
 namespace LpCVT {
     class Remesher {
@@ -26,10 +28,8 @@ namespace LpCVT {
         ~Remesher() = default;
 
         void Init(const GEO::Mesh &M_in,
-                  GEO::coord_index_t dim = 3,
-                  unsigned int degree = 2,
-                  double metric_weight = 6.0,
-                  RemeshType type = RemeshType::Lloyd_CVT);
+                  GEO::SmartPointer<LpCVTIS> is,
+                  GEO::coord_index_t dim = 3);
 
         void Remeshing(unsigned int nb_pts = 1000,
                        unsigned int nb_iter = 100);
