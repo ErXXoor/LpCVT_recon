@@ -46,6 +46,10 @@ namespace LpCVT {
         // (see Appendix B.1)
         {
             dE_pow.resize(3);
+//            for (auto &dE: dE_pow) {
+//                dE.resize(nb_dcoeffs);
+//            }
+
             for (unsigned int alpha = 0; alpha <= m_degree; alpha++) {
                 for (unsigned int beta = 0; beta <= m_degree - alpha; beta++) {
                     unsigned int gamma = m_degree - alpha - beta;
@@ -120,7 +124,7 @@ namespace LpCVT {
             R.row(2) = n.row(i);
             Eigen::Matrix3d S = Eigen::Matrix3d::Identity();
             S(2, 2) = m_metric_weight;
-            Eigen::Matrix3d M = R.transpose() * S;
+            Eigen::Matrix3d M = S * R.transpose();
             m_quad_metric.push_back(M);
         }
     }
@@ -159,7 +163,8 @@ namespace LpCVT {
 
         if (m_facetsAABB != nullptr) {
             auto mid_tmp = (p1_vec3 + p2_vec3 + p3_vec3) / 3.0;
-            auto mid = GEO::vec3(p0_vec[0], p0_vec[1], p0_vec[2]);
+//            auto mid = GEO::vec3(p0_vec[0], p0_vec[1], p0_vec[2]);
+            auto mid = GEO::vec3(mid_tmp[0], mid_tmp[1], mid_tmp[2]);
             auto f_id = m_facetsAABB->nearest_facet(mid);
             auto f_v = m_mesh->GetFace(f_id);
             M = m_quad_metric[f_v[0]] + m_quad_metric[f_v[1]] + m_quad_metric[f_v[2]];
@@ -181,6 +186,26 @@ namespace LpCVT {
             M.block<3, 3>(0, 0) += N_mat3;
         }
 
+        Eigen::VectorXd dFdp1, dFdp2, dFdp3;
+
+//        double f = eval_explicit(p0_vec, p1_vec, p2_vec, p3_vec, M, dFdp1, dFdp2, dFdp3);
+        double f = eval_ad(p0_vec, p1_vec, p2_vec, p3_vec, M, dFdp1, dFdp2, dFdp3);
+
+        for (auto i = 0; i < m_dim; i++) {
+            g_[m_dim * v + i] += -dFdp1[i] - dFdp2[i] - dFdp3[i];
+        }
+
+        return f;
+    }
+
+    double LpCVTIS::eval_explicit(const Eigen::VectorXd &p0_vec,
+                                  const Eigen::VectorXd &p1_vec,
+                                  const Eigen::VectorXd &p2_vec,
+                                  const Eigen::VectorXd &p3_vec,
+                                  const Eigen::MatrixXd &M,
+                                  Eigen::VectorXd &dFdp1,
+                                  Eigen::VectorXd &dFdp2,
+                                  Eigen::VectorXd &dFdp3) {
         std::vector<std::vector<Eigen::VectorXd>> U_pow;
         U_pow.resize(3);
         U_pow[0].resize(m_degree + 1);
@@ -263,17 +288,99 @@ namespace LpCVT {
         // Assemble dF = E.d|T| + |T|.dE
         // Rem: anisotropy matrix needs to be transposed
         // grad(F(MX)) = J(F(MX))^T = (gradF^T M)^T = M^T grad F
-        Eigen::VectorXd dFdU1, dFdU2, dFdU3, dFdp1, dFdp2, dFdp3;
+        Eigen::VectorXd dFdU1, dFdU2, dFdU3;
         dFdp1 = M.transpose() * (E * dTdU1 + T * dEdU1);
         dFdp2 = M.transpose() * (E * dTdU2 + T * dEdU2);
         dFdp3 = M.transpose() * (E * dTdU3 + T * dEdU3);
 
-        for (auto i = 0; i < m_dim; i++) {
-            g_[m_dim * v + i] += -dFdp1[i] - dFdp2[i] - dFdp3[i];
+        return T * E;
+    }
+
+    double LpCVTIS::eval_ad(const Eigen::VectorXd &p0,
+                            const Eigen::VectorXd &p1,
+                            const Eigen::VectorXd &p2,
+                            const Eigen::VectorXd &p3,
+                            const Eigen::MatrixXd &M,
+                            Eigen::VectorXd &dFdp1,
+                            Eigen::VectorXd &dFdp2,
+                            Eigen::VectorXd &dFdp3) {
+        stan::math::ChainableStack stack_;
+        Eigen::VectorXd U1 = M * (p1 - p0);
+        Eigen::VectorXd U2 = M * (p2 - p0);
+        Eigen::VectorXd U3 = M * (p3 - p0);
+
+        // Computation of function value.
+        std::vector<std::vector<Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1>>> U_pow;
+        U_pow.resize(3);
+        U_pow[0].resize(m_degree + 1);
+        U_pow[1].resize(m_degree + 1);
+        U_pow[2].resize(m_degree + 1);
+        U_pow[0][0] = Eigen::VectorXd::Ones(m_dim);
+        U_pow[1][0] = Eigen::VectorXd::Ones(m_dim);
+        U_pow[2][0] = Eigen::VectorXd::Ones(m_dim);
+
+        Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> U1_E = U1;
+        Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> U2_E = U2;
+        Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> U3_E = U3;
+        U_pow[0][1] = U1_E;
+        U_pow[1][1] = U2_E;
+        U_pow[2][1] = U3_E;
+
+        for (unsigned int i = 2; i <= m_degree; i++) {
+            U_pow[0][i] = U_pow[0][1].cwiseProduct(U_pow[0][i - 1]);
+            U_pow[1][i] = U_pow[1][1].cwiseProduct(U_pow[1][i - 1]);
+            U_pow[2][i] = U_pow[2][1].cwiseProduct(U_pow[2][i - 1]);
         }
 
-        double f = T * E;
-        return f;
+        stan::math::var E = 0.0;
+        for (unsigned int i = 0; i < nb_coeffs; i++) {
+            Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> W;
+            unsigned int alpha = E_pow[i][0];
+            unsigned int beta = E_pow[i][1];
+            unsigned int gamma = E_pow[i][2];
+            W = U_pow[0][alpha].cwiseProduct(U_pow[1][beta]).cwiseProduct(U_pow[2][gamma]);
+            E += W.sum();
+        }
+
+        Eigen::VectorXd dEdU1, dEdU2, dEdU3;
+        dEdU1.setZero(m_dim);
+        dEdU2.setZero(m_dim);
+        dEdU3.setZero(m_dim);
+        E.grad();
+        dEdU1 = U1_E.adj();
+        dEdU2 = U2_E.adj();
+        dEdU3 = U3_E.adj();
+
+
+        // Computation of area
+        Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> U1_T = U1;
+        Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> U2_T = U2;
+        Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> U3_T = U3;
+
+        stan::math::var a = stan::math::distance(U1_T, U2_T);
+        stan::math::var b = stan::math::distance(U2_T, U3_T);
+        stan::math::var c = stan::math::distance(U3_T, U1_T);
+        stan::math::var s = double(0.5) * (a + b + c);
+        stan::math::var A2 = s * (s - a) * (s - b) * (s - c);
+        A2 = stan::math::if_else(A2 < 0.0, 0.0, A2);
+        stan::math::var T = stan::math::sqrt(A2);
+
+        Eigen::VectorXd dTdU1, dTdU2, dTdU3;
+        dTdU1.setZero(m_dim);
+        dTdU2.setZero(m_dim);
+        dTdU3.setZero(m_dim);
+
+        T.grad();
+        if (A2 >= 1e-10) {
+            dTdU1 = U1_T.adj();
+            dTdU2 = U2_T.adj();
+            dTdU3 = U3_T.adj();
+        }
+        dFdp1 = M.transpose() * (E.val() * dTdU1 + T.val() * dEdU1);
+        dFdp2 = M.transpose() * (E.val() * dTdU2 + T.val() * dEdU2);
+        dFdp3 = M.transpose() * (E.val() * dTdU3 + T.val() * dEdU3);
+
+        return T.val() * E.val();
     }
 
     double

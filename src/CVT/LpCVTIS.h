@@ -38,8 +38,24 @@ namespace LpCVT {
                 GEO::index_t v_adj = GEO::index_t(-1)
         ) override;
 
-        double grad_tri(const GEO::vec3 &U1, const GEO::vec3 &U2, const GEO::vec3 &U3,
-                        GEO::vec3 &dTdU1, GEO::vec3 &dTdU2, GEO::vec3 &dTdU3);
+        double eval_explicit(const Eigen::VectorXd &p0,
+                             const Eigen::VectorXd &p1,
+                             const Eigen::VectorXd &p2,
+                             const Eigen::VectorXd &p3,
+                             const Eigen::MatrixXd &M,
+                             Eigen::VectorXd &dFdp1,
+                             Eigen::VectorXd &dFdp2,
+                             Eigen::VectorXd &dFdp3);
+
+        double eval_ad(const Eigen::VectorXd &p0,
+                       const Eigen::VectorXd &p1,
+                       const Eigen::VectorXd &p2,
+                       const Eigen::VectorXd &p3,
+                       const Eigen::MatrixXd &M,
+                       Eigen::VectorXd &dFdp1,
+                       Eigen::VectorXd &dFdp2,
+                       Eigen::VectorXd &dFdp3);
+
 
         //Don't want to expose Eigen
         double grad_tri(unsigned int dim,
@@ -51,6 +67,9 @@ namespace LpCVT {
                         std::vector<double> &dTdU3);
 
         //Utils
+        double grad_tri(const GEO::vec3 &U1, const GEO::vec3 &U2, const GEO::vec3 &U3,
+                        GEO::vec3 &dTdU1, GEO::vec3 &dTdU2, GEO::vec3 &dTdU3);
+
         void vecmul(const double *p1, const double *p2, double *to);
 
         void vecmul(const double *p1, const double *p2, const double *p3, double *to);
