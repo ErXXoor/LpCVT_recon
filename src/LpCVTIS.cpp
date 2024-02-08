@@ -124,8 +124,8 @@ namespace LpCVT {
             R.row(2) = n.row(i);
             Eigen::Matrix3d S = Eigen::Matrix3d::Identity();
             S(2, 2) = m_metric_weight;
-            Eigen::Matrix3d M = S * R.transpose();
-            m_quad_metric.push_back(M);
+            Eigen::Matrix3d M = S * R;
+            m_quad_metric.push_back(M.transpose());
         }
     }
 
@@ -167,8 +167,7 @@ namespace LpCVT {
             auto mid = GEO::vec3(mid_tmp[0], mid_tmp[1], mid_tmp[2]);
             auto f_id = m_facetsAABB->nearest_facet(mid);
             auto f_v = m_mesh->GetFace(f_id);
-            M = m_quad_metric[f_v[0]] + m_quad_metric[f_v[1]] + m_quad_metric[f_v[2]];
-            M = 1.0 / 3.0 * M;
+            M = m_quad_metric[f_v[0]];
 //
 //            auto v_id = m_vertices_id[f_id];
 //            auto a = m_vertices[3 * f_id];
