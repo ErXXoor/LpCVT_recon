@@ -8,12 +8,18 @@
 #include <stan/math.hpp>
 #include <geogram/voronoi/integration_simplex.h>
 #include <geogram/mesh/mesh_AABB.h>
+#include <geogram/delaunay/delaunay.h>
 #include "Base/Mesh.h"
 #include <memory>
 
 namespace LpCVT {
     class LpCVTIS : public GEO::IntegrationSimplex {
     public:
+        enum class MetricType {
+            Feature = 0,
+            Quad
+        };
+
         LpCVTIS(const GEO::Mesh &mesh, bool volumetric, unsigned int dim, unsigned int degree,
                 double metric_weight = 6.0);
 
@@ -56,8 +62,18 @@ namespace LpCVT {
                        Eigen::VectorXd &dFdp2,
                        Eigen::VectorXd &dFdp3);
 
+        void grad_site(GEO::index_t site_id,
+                       const GEOGen::Vertex &v,
+                       const Eigen::Vector3d &N,
+                       const Eigen::VectorXd &dFdC);
 
-        //Don't want to expose Eigen
+        void compute_W(const Eigen::Vector3d &N0,
+                       const Eigen::Vector3d &N1,
+                       const Eigen::Vector3d &N2,
+                       Eigen::Vector3d &W0,
+                       Eigen::Vector3d &W1);
+
+
         double grad_tri(unsigned int dim,
                         const double *U1,
                         const double *U2,
@@ -67,20 +83,10 @@ namespace LpCVT {
                         std::vector<double> &dTdU3);
 
         //Utils
+        void add_grad(Eigen::VectorXd grad, GEO::index_t site_id);
+
         double grad_tri(const GEO::vec3 &U1, const GEO::vec3 &U2, const GEO::vec3 &U3,
                         GEO::vec3 &dTdU1, GEO::vec3 &dTdU2, GEO::vec3 &dTdU3);
-
-        void vecmul(const double *p1, const double *p2, double *to);
-
-        void vecmul(const double *p1, const double *p2, const double *p3, double *to);
-
-        double vecbar(const double *p1);
-
-        void vecmadd(double s, const double *p1, const double *p2, const double *p3, double *to);
-
-        void vecmadd(double s, const GEO::vec3 &p1, double t, const GEO::vec3 &p2, GEO::vec3 &to);
-
-        void matTvecmul(const GEO::mat3 &M, const GEO::vec3 &U, GEO::vec3 &V);
 
 
     private:
@@ -89,13 +95,30 @@ namespace LpCVT {
         unsigned int nb_coeffs;
         unsigned int nb_dcoeffs;
         double m_metric_weight;
+        MetricType m_metric_type;
         std::vector<std::vector<unsigned int>> E_pow;
         std::vector<std::vector<std::vector<unsigned int>>> dE_pow;
         std::shared_ptr<GEO::MeshFacetsAABB> m_facetsAABB = nullptr;
         std::shared_ptr<Mesh> m_mesh;
+        GEO::Mesh *m_mesh_geo;
         std::vector<std::vector<unsigned int>> m_vertices_id;
         std::vector<std::vector<double>> m_vertices;
         std::vector<Eigen::Matrix3d> m_quad_metric;
+
+        GEO::Delaunay *m_dly;
+
+    public:
+        void set_Delaunay(GEO::Delaunay *delaunay) {
+            m_dly = delaunay;
+        }
+
+        void set_mesh_geo(GEO::Mesh *mesh_geo) {
+            m_mesh_geo = mesh_geo;
+        }
+
+        void set_metric_type(MetricType metric_type) {
+            m_metric_type = metric_type;
+        }
 
     };
 

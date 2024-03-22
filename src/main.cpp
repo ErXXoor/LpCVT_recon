@@ -57,34 +57,29 @@ int main(int argc, char **argv) {
         mesh_ori->LoadMesh(input_ori_filename);
     }
 
+    auto remesh_type = LpCVT::Remesher::RemeshType::L2CVT;
     GEO::SmartPointer<LpCVT::LpCVTIS> is;
-    auto remesh_type = LpCVT::Remesher::RemeshType::LPCVT_NORMAL;
-    if (remesh_type == LpCVT::Remesher::RemeshType::LPCVT) {
-        is = new LpCVT::LpCVTIS(M, false, dim, degree, metric_weight);
-    } else if (remesh_type == LpCVT::Remesher::RemeshType::LPCVT_NORMAL) {
-        is = new LpCVT::LpCVTIS(M, false, dim, degree, metric_weight);
-        auto facet_aabb = std::make_shared<GEO::MeshFacetsAABB>();
-        facet_aabb->initialize(M, false);
+    is = new LpCVT::LpCVTIS(M, false, dim, degree, metric_weight);
+    if (remesh_type == LpCVT::Remesher::RemeshType::L8CVT) {
 
-
-        if(dim>3){
+        if (dim > 3) {
             mesh_ori->CalculateCurvature();
             is->set_mesh(mesh_ori);
-        }
-        else{
-            mesh->CalculateCurvature();
+        } else {
+//            mesh->CalculateCurvature();
+//            mesh->CalculateCrossField();
             is->set_mesh(mesh);
         }
-        is->CalQuadMetric();
-        is->set_facetsAABB(facet_aabb);
+        is->set_metric_type(LpCVT::LpCVTIS::MetricType::Quad);
+//        is->CalQuadMetric();
     }
 
     LpCVT::Remesher remesher;
-    remesher.Init(M, is, dim);
+    remesher.Init(&M, is, dim, remesh_type);
     remesher.Remeshing(nb_pts, iteration);
     GEO::Mesh M_out;
-//    remesher.GetRDT(M_out, post_process);
-    remesher.GetRVD(M_out);
+    remesher.GetRDT(M_out, post_process);
+//    remesher.GetRVD(M_out);
 
     LpCVT::MeshAdaptor::SaveGEOMesh(output_filename, M_out);
 

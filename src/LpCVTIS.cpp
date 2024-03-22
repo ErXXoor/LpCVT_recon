@@ -6,10 +6,34 @@
 #include <geogram/basic/smart_pointer.h>
 #include <geogram/basic/geometry_nd.h>
 #include <stan/math/rev/core/chainablestack.hpp>
-#include <geogram/basic/logger.h>
+#include <igl/rotation_matrix_from_directions.h>
 
 namespace LpCVT {
+    void point2vec(const double *point,
+                   unsigned int dim,
+                   Eigen::VectorXd &vec) {
+        vec = Eigen::VectorXd::Zero(dim);
+        for (unsigned int i = 0; i < dim; i++) {
+            vec(i) = point[i];
+        }
+    }
 
+    void point2vec(const double *point,
+                   unsigned int dim,
+                   Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> &vec) {
+        vec = Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1>::Zero(dim);
+        for (unsigned int i = 0; i < dim; i++) {
+            vec(i) = point[i];
+        }
+    }
+
+    void soft_zero(Eigen::Vector3d &vec, double eps = 1e-10) {
+        for (auto i = 0; i < vec.size(); i++) {
+            if (::fabs(vec[i]) < eps) {
+                vec[i] = 0.0;
+            }
+        }
+    }
 
     LpCVTIS::LpCVTIS(const GEO::Mesh &mesh,
                      bool volumetric,
@@ -46,9 +70,6 @@ namespace LpCVT {
         // (see Appendix B.1)
         {
             dE_pow.resize(3);
-//            for (auto &dE: dE_pow) {
-//                dE.resize(nb_dcoeffs);
-//            }
 
             for (unsigned int alpha = 0; alpha <= m_degree; alpha++) {
                 for (unsigned int beta = 0; beta <= m_degree - alpha; beta++) {
@@ -113,22 +134,20 @@ namespace LpCVT {
     }
 
     void LpCVTIS::CalQuadMetric() {
-        auto min_pd = m_mesh->GetMinPD();
-        auto max_pd = m_mesh->GetMaxPD();
-        auto n = m_mesh->GetVertexNormals();
-
-        for (auto i = 0; i < min_pd.rows(); i++) {
+        auto fn = m_mesh->GetFaceNormals();
+        auto cross_w = m_mesh->GetCrossFieldW();
+        auto cross_v = m_mesh->GetCrossFieldV();
+        for (auto i = 0; i < fn.rows(); i++) {
             Eigen::Matrix3d R;
-            R.row(0) = min_pd.row(i);
-            R.row(1) = max_pd.row(i);
-            R.row(2) = n.row(i);
+            R.row(0) = cross_w.row(i);
+            R.row(1) = cross_v.row(i);
+            R.row(2) = fn.row(i);
             Eigen::Matrix3d S = Eigen::Matrix3d::Identity();
-            S(2, 2) = m_metric_weight;
-            Eigen::Matrix3d M = S * R;
-            m_quad_metric.push_back(M.transpose());
+            S(2, 2) *= m_metric_weight;
+            Eigen::Matrix3d M = R * S * R.transpose();
+            m_quad_metric.emplace_back(M);
         }
     }
-
 
     double LpCVTIS::eval(
             GEO::index_t v,
@@ -157,28 +176,20 @@ namespace LpCVT {
         auto p2_vec3 = Eigen::Vector3d(p2.point()[0], p2.point()[1], p2.point()[2]);
         auto p3_vec3 = Eigen::Vector3d(p3.point()[0], p3.point()[1], p3.point()[2]);
 
-
         Eigen::MatrixXd M = Eigen::MatrixXd::Identity(m_dim, m_dim);
+        Eigen::Vector3d N = (p2_vec3 - p1_vec3).cross(p3_vec3 - p1_vec3);
+        N.normalize();
 
+        if (m_metric_type == MetricType::Quad) {
+//            auto mid_tmp = (p1_vec3 + p2_vec3 + p3_vec3) / 3.0;
+//            auto mid = GEO::vec3(mid_tmp[0], mid_tmp[1], mid_tmp[2]);
+//            auto f_id = m_facetsAABB->nearest_facet(mid);
+//            auto metric = m_quad_metric[t];
+//            Eigen::Vector3d normal = m_quad_metric[f_id].col(2);
+//            metric.col(2) = N;
 
-        if (m_facetsAABB != nullptr) {
-            auto mid_tmp = (p1_vec3 + p2_vec3 + p3_vec3) / 3.0;
-//            auto mid = GEO::vec3(p0_vec[0], p0_vec[1], p0_vec[2]);
-            auto mid = GEO::vec3(mid_tmp[0], mid_tmp[1], mid_tmp[2]);
-            auto f_id = m_facetsAABB->nearest_facet(mid);
-            auto f_v = m_mesh->GetFace(f_id);
-            M = m_quad_metric[f_v[0]];
-//
-//            auto v_id = m_vertices_id[f_id];
-//            auto a = m_vertices[3 * f_id];
-//            auto b = m_vertices[3 * f_id + 1];
-//            auto c = m_vertices[3 * f_id + 2];
-
-
+//            M.block<3, 3>(0, 0) = m_quad_metric[t];
         } else {
-            Eigen::Vector3d N = (p2_vec3 - p1_vec3).cross(p3_vec3 - p1_vec3);
-            N.normalize();
-
             Eigen::Matrix3d N_mat3 = N * N.transpose();
             N_mat3 = N_mat3 * m_metric_weight;
 
@@ -188,7 +199,12 @@ namespace LpCVT {
         Eigen::VectorXd dFdp1, dFdp2, dFdp3;
 
 //        double f = eval_explicit(p0_vec, p1_vec, p2_vec, p3_vec, M, dFdp1, dFdp2, dFdp3);
+        stan::math::ChainableStack stack_;
         double f = eval_ad(p0_vec, p1_vec, p2_vec, p3_vec, M, dFdp1, dFdp2, dFdp3);
+
+//        grad_site(v, p1, N, dFdp1);
+//        grad_site(v, p2, N, dFdp2);
+//        grad_site(v, p3, N, dFdp3);
 
         for (auto i = 0; i < m_dim; i++) {
             g_[m_dim * v + i] += -dFdp1[i] - dFdp2[i] - dFdp3[i];
@@ -303,7 +319,6 @@ namespace LpCVT {
                             Eigen::VectorXd &dFdp1,
                             Eigen::VectorXd &dFdp2,
                             Eigen::VectorXd &dFdp3) {
-        stan::math::ChainableStack stack_;
         Eigen::VectorXd U1 = M * (p1 - p0);
         Eigen::VectorXd U2 = M * (p2 - p0);
         Eigen::VectorXd U3 = M * (p3 - p0);
@@ -460,41 +475,150 @@ namespace LpCVT {
         return A.val();
     }
 
-    void LpCVTIS::vecmul(const double *p1, const double *p2, double *to) {
+    void LpCVTIS::add_grad(Eigen::VectorXd grad, GEO::index_t site_id) {
         for (auto i = 0; i < m_dim; i++) {
-            to[i] = p1[i] * p2[i];
+            g_[m_dim * site_id + i] += grad[i];
         }
     }
 
-    void LpCVTIS::vecmul(const double *p1, const double *p2, const double *p3, double *to) {
-        for (auto i = 0; i < m_dim; i++) {
-            to[i] = p1[i] * p2[i] * p3[i];
+    void LpCVTIS::compute_W(const Eigen::Vector3d &N0,
+                            const Eigen::Vector3d &N1,
+                            const Eigen::Vector3d &N2,
+                            Eigen::Vector3d &W0,
+                            Eigen::Vector3d &W1) {
+        W0 = N1.cross(N2);
+        double Tinv = 1.0;
+        if (N0.dot(W0) != 0)
+            Tinv = 1.0 / (N0.dot(W0));
+        W0 *= Tinv;
+
+        W1 = N2.cross(N0);
+        W1 *= Tinv;
+    }
+
+    void intersect_geom(Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> &site_a,
+                        Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> &site_b,
+                        Eigen::VectorXd &edg_v1,
+                        Eigen::VectorXd &edg_v2,
+                        Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> &C
+    ) {
+        Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> n = site_a - site_b;
+        stan::math::var d = -n.dot(site_a + site_b);
+        stan::math::var l1 = edg_v2.dot(n);
+        stan::math::var l2 = edg_v1.dot(n);
+        d = 0.5 * d;
+        l1 = stan::math::fabs(l1 + d);
+        l2 = stan::math::fabs(l2 + d);
+        stan::math::var l = l1 + l2;
+        l1 = stan::math::if_else(l > 1e-30, l1 / l, 0.5);
+        l2 = stan::math::if_else(l > 1e-30, l2 / l, 0.5);
+        C = l1 * edg_v1 + l2 * edg_v2;
+    }
+
+    void LpCVTIS::grad_site(GEO::index_t site_id,
+                            const GEOGen::Vertex &C,
+                            const Eigen::Vector3d &N,
+                            const Eigen::VectorXd &dFdC) {
+
+
+        Eigen::VectorXd site_vec;
+        point2vec(vertex_ptr(site_id), m_dim, site_vec);
+
+        Eigen::VectorXd C_vec;
+        point2vec(C.point(), m_dim, C_vec);
+
+        switch (C.sym().nb_bisectors()) {
+            case 1: {
+                // config B: The point v is the intersection between
+                //   two facets of the surface and one bisector.
+
+                Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> site_ad = site_vec;
+                auto b = C.sym().bisector(0);
+                auto site_b = m_dly->vertex_ptr(b);
+                Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> site_b_ad;
+                point2vec(site_b, m_dim, site_b_ad);
+
+                GEO::index_t edg_v1_idx, edg_v2_idx;
+                C.sym().get_boundary_edge(edg_v1_idx, edg_v2_idx);
+
+                Eigen::VectorXd edg_v1;
+                point2vec(
+                        mesh_.vertices.point_ptr(edg_v1_idx), m_dim, edg_v1);
+                Eigen::VectorXd edg_v2;
+                point2vec(
+                        mesh_.vertices.point_ptr(edg_v2_idx), m_dim, edg_v2);
+
+                Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> C_ad;
+                intersect_geom(site_ad, site_b_ad, edg_v1, edg_v2, C_ad);
+
+                //site gradient
+                Eigen::MatrixXd J_site, J_site_b;
+                J_site.resize(C_ad.rows(), site_ad.rows());
+                J_site_b.resize(C_ad.rows(), site_b_ad.rows());
+                for (auto i = 0; i < C_ad.rows(); i++) {
+                    if (i > 0) {
+                        stan::math::set_zero_all_adjoints();
+                    }
+                    C_ad(i).grad();
+                    for (auto j = 0; j < site_ad.rows(); j++) {
+                        J_site(i, j) = site_ad(j).adj();
+                        J_site_b(i, j) = site_b_ad(j).adj();
+                    }
+                }
+
+                Eigen::VectorXd dFdCJ = dFdC.transpose() * J_site;
+                add_grad(dFdCJ, site_id);
+
+                Eigen::VectorXd dFdCJ_b = dFdC.transpose() * J_site_b;
+                add_grad(dFdCJ_b, b);
+
+                break;
+            }
+            case 2: {
+                // config C: The point v is the intersection between
+                // one facets of the surface and two bisectors.
+
+                //site gradient for a, c
+                auto b = C.sym().bisector(0);
+                auto site_b = m_dly->vertex_ptr(b);
+                Eigen::VectorXd site_b_vec;
+                point2vec(site_b, m_dim, site_b_vec);
+
+                auto c = C.sym().bisector(1);
+                auto site_c = m_dly->vertex_ptr(c);
+                Eigen::VectorXd site_c_vec;
+                point2vec(site_c, m_dim, site_c_vec);
+
+
+                Eigen::Vector3d W0, W1;
+                compute_W((site_b_vec - site_vec).head<3>(),
+                          (site_c_vec - site_vec).head<3>(),
+                          N, W0, W1);
+
+                Eigen::Matrix3d J;
+                //============= dC/dp0
+                auto d0 = C_vec - site_vec;
+                auto W = W0 + W1;
+                J = d0 * W.transpose();
+                Eigen::Vector3d dFdCJ_ = J * dFdC;
+                add_grad(dFdCJ_, site_id);
+
+                //============= dC/dp1
+                auto d1 = site_b_vec - C_vec;
+                J = d1 * W0.transpose();
+                dFdCJ_ = J * dFdC;
+                add_grad(dFdCJ_, b);
+
+                //============= dC/dp2
+                auto d2 = site_c_vec - C_vec;
+                J = d2 * W1.transpose();
+                dFdCJ_ = J * dFdC;
+                add_grad(dFdCJ_, c);
+                break;
+            }
+            default:
+                break;
         }
-    }
 
-    double LpCVTIS::vecbar(const double *p1) {
-        double result = 0.0;
-        for (auto i = 0; i < m_dim; i++) {
-            result += p1[i];
-        }
-        return result;
-    }
-
-    void LpCVTIS::vecmadd(double s, const double *p1, const double *p2, const double *p3, double *to) {
-        for (auto i = 0; i < m_dim; i++) {
-            to[i] += s * p1[i] * p2[i] * p3[i];
-        }
-    }
-
-    void LpCVTIS::vecmadd(double s, const GEO::vec3 &p1, double t, const GEO::vec3 &p2, GEO::vec3 &to) {
-        to.x = s * p1.x + t * p2.x;
-        to.y = s * p1.y + t * p2.y;
-        to.z = s * p1.z + t * p2.z;
-    }
-
-    void LpCVTIS::matTvecmul(const GEO::mat3 &M, const GEO::vec3 &U, GEO::vec3 &V) {
-        V.x = M(0, 0) * U.x + M(1, 0) * U.y + M(2, 0) * U.z;
-        V.y = M(0, 1) * U.x + M(1, 1) * U.y + M(2, 1) * U.z;
-        V.z = M(0, 2) * U.x + M(1, 2) * U.y + M(2, 2) * U.z;
     }
 }

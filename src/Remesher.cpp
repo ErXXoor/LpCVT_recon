@@ -6,18 +6,21 @@
 #include <geogram/basic/progress.h>
 
 namespace LpCVT {
-    void Remesher::Init(const GEO::Mesh &M_in,
+    void Remesher::Init(GEO::Mesh *M_in,
                         GEO::SmartPointer<LpCVTIS> is,
-                        GEO::coord_index_t dim
+                        GEO::coord_index_t dim,
+                        RemeshType type
     ) {
         GEO::Logger::div("CVT meshing");
-        GEO::Mesh *mesh = new GEO::Mesh();
-        mesh->copy(M_in);
 
-        m_cvt = std::make_shared<LpCVTWrap>(mesh, dim);
+        m_cvt = std::make_shared<LpCVTWrap>(M_in, dim);
         m_cvt->set_volumetric(false);
+        is->set_Delaunay(m_cvt->delaunay());
+        is->set_mesh_geo(M_in);
+        //no cast func for GEO::IntegrationSimplex_var
         m_is = is;
         m_cvt->set_simplex_func(m_is);
+        m_type = type;
 
     }
 
