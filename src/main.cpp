@@ -4,8 +4,10 @@
 #include "Base/MeshAdaptor.h"
 #include "Base/Mesh.h"
 #include "CVT/Remesher.h"
+#include "CVT/LpCVTIS.h"
 #include <geogram/basic/command_line_args.h>
-
+#include <geogram/mesh/mesh_AABB.h>
+#include <geogram/basic/smart_pointer.h>
 
 int main(int argc, char **argv) {
     GEO::initialize();
@@ -18,39 +20,67 @@ int main(int argc, char **argv) {
 
     std::string input_filename;
     std::string output_filename;
+    std::string input_ori_filename;
     int iteration = 400;
-    int nb_pts = 1564;
+    int nb_pts = 13435;
     int dim = 8;
+    double metric_weight = 6.0;
+    int degree = 2;
     bool post_process = false;
 
-    if (argc == 7) {
+    if (argc == 10) {
         input_filename = argv[1];
         output_filename = argv[2];
         dim = std::stoi(argv[3]);
         iteration = std::stoi(argv[4]);
         nb_pts = std::stoi(argv[5]);
-        post_process = std::string(argv[6]) == "true";
+        degree = std::stoi(argv[6]);
+        metric_weight = std::stod(argv[7]);
+        post_process = std::string(argv[8]) == "true";
+        input_ori_filename = argv[9];
     } else {
-        input_filename = "/media/hongbo/45ad552c-e83b-4f01-9864-7d87cfa1377e/hongbo/Thing10k_tetwild/hd_output_opt/237739/237739_emb.obj";
-        output_filename = "/home/hongbo/Desktop/code/LpCVT_recon/tmp/237739_tri.obj";
-//        std::cout<<"Parameter length error"<<std::endl;
-//        return 0;
+        std::cout << "Parameter length error" << std::endl;
+        return 0;
     }
 
+
     GEO::Mesh M;
+    std::shared_ptr<LpCVT::Mesh> mesh;
+    std::shared_ptr<LpCVT::Mesh> mesh_ori;
     if (dim == 3) {
-        std::shared_ptr<LpCVT::Mesh> mesh = std::make_shared<LpCVT::Mesh>();
+        mesh = std::make_shared<LpCVT::Mesh>();
         mesh->LoadMesh(input_filename);
         LpCVT::MeshAdaptor::Convert(*mesh, M);
     } else {
         LpCVT::MeshAdaptor::HdMeshLoad(input_filename, M, dim);
+        mesh_ori = std::make_shared<LpCVT::Mesh>();
+        mesh_ori->LoadMesh(input_ori_filename);
+    }
+
+    auto remesh_type = LpCVT::Remesher::RemeshType::L2CVT;
+    GEO::SmartPointer<LpCVT::LpCVTIS> is;
+    is = new LpCVT::LpCVTIS(M, false, dim, degree, metric_weight);
+    if (remesh_type == LpCVT::Remesher::RemeshType::L8CVT) {
+
+        if (dim > 3) {
+            mesh_ori->CalculateCurvature();
+            is->set_mesh(mesh_ori);
+        } else {
+//            mesh->CalculateCurvature();
+//            mesh->CalculateCrossField();
+            is->set_mesh(mesh);
+        }
+        is->set_metric_type(LpCVT::LpCVTIS::MetricType::Quad);
+//        is->CalQuadMetric();
     }
 
     LpCVT::Remesher remesher;
-    remesher.Init(M, dim, LpCVT::Remesher::RemeshType::LPCVT);
+    remesher.Init(&M, is, dim, remesh_type);
     remesher.Remeshing(nb_pts, iteration);
     GEO::Mesh M_out;
     remesher.GetRDT(M_out, post_process);
+//    remesher.GetRVD(M_out);
 
     LpCVT::MeshAdaptor::SaveGEOMesh(output_filename, M_out);
+
 }

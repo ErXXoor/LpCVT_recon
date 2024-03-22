@@ -3,38 +3,30 @@
 //
 #include "CVT/Remesher.h"
 #include <geogram/basic/logger.h>
-#include "CVT/LpCVTIS.h"
 #include <geogram/basic/progress.h>
-#include <geogram/basic/smart_pointer.h>
 
 namespace LpCVT {
-    void Remesher::Init(const GEO::Mesh &M_in, GEO::coord_index_t dim, RemeshType type) {
+    void Remesher::Init(GEO::Mesh *M_in,
+                        GEO::SmartPointer<LpCVTIS> is,
+                        GEO::coord_index_t dim,
+                        RemeshType type
+    ) {
         GEO::Logger::div("CVT meshing");
-        GEO::Mesh *mesh = new GEO::Mesh();
-        mesh->copy(M_in);
 
-        m_type = type;
-        if (type == RemeshType::LPCVT_NORMAL) {
-            m_facetsAABB = std::make_shared<GEO::MeshFacetsAABB>();
-            m_facetsAABB->initialize(*mesh);
-        }
-
-        m_cvt = std::make_shared<LpCVTWrap>(mesh, dim);
+        m_cvt = std::make_shared<LpCVTWrap>(M_in, dim);
         m_cvt->set_volumetric(false);
-
-        if (type <= RemeshType::LPCVT) {
-            m_is = new LpCVTIS(*mesh, false, dim, 2);
-            m_cvt->set_simplex_func(m_is);
-        } else if (type == RemeshType::LPCVT_NORMAL) {
-            GEO::SmartPointer<LpCVTIS> is = new LpCVTIS(*mesh, false, dim, 2);
-            is->set_facetsAABB(m_facetsAABB);
-            m_is = is;
-            m_cvt->set_simplex_func(m_is);
-        }
+        is->set_Delaunay(m_cvt->delaunay());
+        is->set_mesh_geo(M_in);
+        //no cast func for GEO::IntegrationSimplex_var
+        m_is = is;
+        m_cvt->set_simplex_func(m_is);
+        m_type = type;
 
     }
 
-    void Remesher::Remeshing(unsigned int nb_pts, unsigned int nb_iter) {
+    void Remesher::Remeshing(unsigned int nb_pts,
+                             unsigned int nb_iter) {
+        GEO::Logger::div("Set metric weight");
         GEO::Logger::div("Generate random samples");
 
         m_cvt->compute_initial_sampling(nb_pts);

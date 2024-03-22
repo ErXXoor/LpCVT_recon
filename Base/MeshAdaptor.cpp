@@ -6,12 +6,10 @@
 #include <geogram/basic/line_stream.h>
 
 namespace LpCVT {
-    void MeshAdaptor::Convert(const Mesh mesh_in, GEO::Mesh &M_out) {
+    void MeshAdaptor::Convert(const Mesh &mesh_in, GEO::Mesh &M_out) {
         M_out.clear();
         M_out.vertices.set_double_precision();
         M_out.vertices.set_dimension(3);
-        GEO::Attribute<double> face_normal;
-        face_normal.create_vector_attribute(M_out.facets.attributes(), "normal", 3);
 
         for (auto i = 0; i < mesh_in.m_v.rows(); i++) {
             std::vector<double> p{mesh_in.m_v(i, 0), mesh_in.m_v(i, 1), mesh_in.m_v(i, 2)};
@@ -22,12 +20,8 @@ namespace LpCVT {
             M_out.facets.create_triangle(mesh_in.m_f(i, 0),
                                          mesh_in.m_f(i, 1),
                                          mesh_in.m_f(i, 2));
-            if (mesh_in.m_fn.rows() > 0) {
-                face_normal[3 * i] = mesh_in.m_fn(i, 0);
-                face_normal[3 * i + 1] = mesh_in.m_fn(i, 1);
-                face_normal[3 * i + 2] = mesh_in.m_fn(i, 2);
-            }
         }
+
         M_out.facets.connect();
     }
 
@@ -37,7 +31,7 @@ namespace LpCVT {
         GEO::mesh_save(M_out, filepath, flags);
     }
 
-    void MeshAdaptor::HdMeshLoad(const std::string &filepath, GEO::Mesh &mesh_out, const int dim) {
+    void MeshAdaptor::HdMeshLoad(const std::string &filepath, GEO::Mesh &mesh_out, int dim) {
         mesh_out.clear();
         mesh_out.vertices.set_double_precision();
         mesh_out.vertices.set_dimension(dim);
@@ -102,4 +96,18 @@ namespace LpCVT {
         }
         mesh_out.facets.connect();
     }
+
+    void MeshAdaptor::AttachAttributeFacet(Eigen::MatrixXd attr,
+                                           const std::string &attr_name,
+                                           int dim,
+                                           GEO::Mesh &M) {
+        GEO::Attribute<double> facet_attr;
+        facet_attr.create_vector_attribute(M.facets.attributes(), attr_name, dim);
+        for (auto i = 0; i < M.facets.nb(); i++) {
+            for (auto j = 0; j < dim; j++) {
+                facet_attr[i * dim + j] = attr(i, j);
+            }
+        }
+    }
+
 }
