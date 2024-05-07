@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
     int degree = 2;
     bool post_process = false;
 
-    if (argc == 10) {
+    if (argc == 9) {
         input_filename = argv[1];
         output_filename = argv[2];
         dim = std::stoi(argv[3]);
@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
         degree = std::stoi(argv[6]);
         metric_weight = std::stod(argv[7]);
         post_process = std::string(argv[8]) == "true";
-        input_ori_filename = argv[9];
+//        input_ori_filename = argv[9];
     } else {
         std::cout << "Parameter length error" << std::endl;
         return 0;
@@ -53,8 +53,8 @@ int main(int argc, char **argv) {
         LpCVT::MeshAdaptor::Convert(*mesh, M);
     } else {
         LpCVT::MeshAdaptor::HdMeshLoad(input_filename, M, dim);
-        mesh_ori = std::make_shared<LpCVT::Mesh>();
-        mesh_ori->LoadMesh(input_ori_filename);
+//        mesh_ori = std::make_shared<LpCVT::Mesh>();
+//        mesh_ori->LoadMesh(input_ori_filename);
     }
 
     auto remesh_type = LpCVT::Remesher::RemeshType::L2CVT;
@@ -80,7 +80,9 @@ int main(int argc, char **argv) {
     GEO::Mesh M_out;
     remesher.GetRDT(M_out, post_process);
 //    remesher.GetRVD(M_out);
+//    remesher.GetHDRDT(M_out);
 
     LpCVT::MeshAdaptor::SaveGEOMesh(output_filename, M_out);
+//    LpCVT::MeshAdaptor::HdMeshSave(output_filename, M_out);
 
 }

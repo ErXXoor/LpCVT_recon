@@ -28,6 +28,7 @@ namespace LpCVT {
     void MeshAdaptor::SaveGEOMesh(const std::string &filepath, const GEO::Mesh &M_out) {
         GEO::MeshIOFlags flags;
         flags.set_attribute(GEO::MESH_ALL_ATTRIBUTES);
+        flags.set_dimension(8);
         GEO::mesh_save(M_out, filepath, flags);
     }
 
@@ -95,6 +96,31 @@ namespace LpCVT {
             }
         }
         mesh_out.facets.connect();
+    }
+
+    void MeshAdaptor::HdMeshSave(const std::string &filepath, const GEO::Mesh &mesh_out) {
+        auto dim = mesh_out.vertices.dimension();
+        std::ofstream out(filepath);
+        if (!out.is_open()) {
+            std::cerr << "Error: cannot open file " << filepath << std::endl;
+            return;
+        }
+        for (GEO::index_t v = 0; v < mesh_out.vertices.nb(); v++) {
+            out << "v";
+            for (GEO::index_t c = 0; c < dim; c++) {
+                out << " " << mesh_out.vertices.point_ptr(v)[c];
+            }
+            out << std::endl;
+        }
+
+        for (GEO::index_t f = 0; f < mesh_out.facets.nb(); f++) {
+            out << "f";
+            for (GEO::index_t lv = 0; lv < mesh_out.facets.nb_vertices(f); lv++) {
+                out << " " << mesh_out.facets.vertex(f, lv) + 1;
+            }
+            out << std::endl;
+        }
+        out.close();
     }
 
     void MeshAdaptor::AttachAttributeFacet(Eigen::MatrixXd attr,

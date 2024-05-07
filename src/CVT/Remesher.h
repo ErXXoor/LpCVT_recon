@@ -39,6 +39,8 @@ namespace LpCVT {
 
         void GetRDT(GEO::Mesh &M_out, bool post_process = false);
 
+        void GetHDRDT(GEO::Mesh &M_out);
+
 
     private:
         std::shared_ptr<LpCVTWrap> m_cvt;
