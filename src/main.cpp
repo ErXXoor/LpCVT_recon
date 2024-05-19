@@ -27,6 +27,7 @@ int main(int argc, char **argv) {
     double metric_weight = 6.0;
     int degree = 2;
     bool post_process = false;
+    std::string constrain_id;
 
     if (argc == 10) {
         input_filename = argv[1];
@@ -37,12 +38,11 @@ int main(int argc, char **argv) {
         degree = std::stoi(argv[6]);
         metric_weight = std::stod(argv[7]);
         post_process = std::string(argv[8]) == "true";
-        input_ori_filename = argv[9];
+        constrain_id = argv[9];
     } else {
         std::cout << "Parameter length error" << std::endl;
-        return 0;
+        return 1;
     }
-
 
     GEO::Mesh M;
     std::shared_ptr<LpCVT::Mesh> mesh;
@@ -53,8 +53,24 @@ int main(int argc, char **argv) {
         LpCVT::MeshAdaptor::Convert(*mesh, M);
     } else {
         LpCVT::MeshAdaptor::HdMeshLoad(input_filename, M, dim);
-        mesh_ori = std::make_shared<LpCVT::Mesh>();
-        mesh_ori->LoadMesh(input_ori_filename);
+//        mesh_ori = std::make_shared<LpCVT::Mesh>();
+//        mesh_ori->LoadMesh(input_ori_filename);
+    }
+
+    std::istringstream stream(constrain_id);
+    std::vector<int> constrain_ids;
+    if(!constrain_id.empty()){
+        int id;
+        while (stream >> id) {
+            constrain_ids.push_back(id);
+        }
+    }
+
+    std::vector<double> constrain_verts;
+    for (int i = 0; i < constrain_ids.size(); i++) {
+        for (int j = 0; j < dim; j++) {
+            constrain_verts.push_back(M.vertices.point(constrain_ids[i])[j]);
+        }
     }
 
     auto remesh_type = LpCVT::Remesher::RemeshType::L2CVT;
@@ -76,11 +92,13 @@ int main(int argc, char **argv) {
 
     LpCVT::Remesher remesher;
     remesher.Init(&M, is, dim, remesh_type);
-    remesher.Remeshing(nb_pts, iteration);
+    remesher.Remeshing(nb_pts, iteration, constrain_verts);
     GEO::Mesh M_out;
     remesher.GetRDT(M_out, post_process);
 //    remesher.GetRVD(M_out);
+//    remesher.GetHDRDT(M_out);
 
     LpCVT::MeshAdaptor::SaveGEOMesh(output_filename, M_out);
+//    LpCVT::MeshAdaptor::HdMeshSave(output_filename, M_out);
 
 }

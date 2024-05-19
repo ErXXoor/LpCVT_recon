@@ -25,11 +25,17 @@ namespace LpCVT {
     }
 
     void Remesher::Remeshing(unsigned int nb_pts,
-                             unsigned int nb_iter) {
+                             unsigned int nb_iter,
+                             std::vector<double> constrain_points) {
         GEO::Logger::div("Set metric weight");
         GEO::Logger::div("Generate random samples");
 
         m_cvt->compute_initial_sampling(nb_pts);
+
+        if(constrain_points.size()>0){
+            m_cvt->set_constrain_points(constrain_points);
+        }
+
 
         GEO::Logger::div("Optimize sampling");
         GEO::ProgressTask progress("Optimize sampling", nb_iter);
@@ -62,6 +68,30 @@ namespace LpCVT {
             auto mode = GEO::RestrictedVoronoiDiagram::RDTMode(mode_i);
             m_cvt->RVD()->compute_RDT(M_out, mode);
         }
+    }
+
+    void Remesher::GetHDRDT(GEO::Mesh &M_out) {
+        GEO::vector<GEO::index_t> simplices;
+        GEO::vector<double> embedding;
+        m_cvt->RVD()->compute_RDT(simplices, embedding);
+
+        M_out.vertices.set_double_precision();
+        M_out.vertices.set_dimension(8);
+
+        for(int i=0;i<embedding.size()-1;i+=8){
+            std::vector<double> p(8);
+            for(int j=0;j<8;j++){
+                p[j] = embedding[i+j];
+            }
+            M_out.vertices.create_vertex(p.data());
+        }
+
+        for(auto i=0;i<simplices.size();i+=3) {
+            M_out.facets.create_triangle(simplices[i], simplices[i + 1], simplices[i + 2]);
+        }
+
+        M_out.facets.connect();
+
     }
 
 }

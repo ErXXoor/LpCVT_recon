@@ -17,6 +17,8 @@ namespace LpCVT {
 
         static void HdMeshLoad(const std::string &filepath, GEO::Mesh &mesh_out, int dim);
 
+        static void HdMeshSave(const std::string &filepath, const GEO::Mesh &mesh_out);
+
         static void AttachAttributeFacet(Eigen::MatrixXd attr,
                                          const std::string &attr_name,
                                          int dim,
