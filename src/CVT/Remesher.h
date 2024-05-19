@@ -33,7 +33,8 @@ namespace LpCVT {
                   RemeshType type = RemeshType::Lloyd_CVT);
 
         void Remeshing(unsigned int nb_pts = 1000,
-                       unsigned int nb_iter = 100);
+                       unsigned int nb_iter = 100,
+                       std::vector<double> constrain_points = std::vector<double>());
 
         void GetRVD(GEO::Mesh &M_out);
 
@@ -47,6 +48,8 @@ namespace LpCVT {
         GEO::IntegrationSimplex_var m_is = nullptr;
         std::shared_ptr<GEO::MeshFacetsAABB> m_facetsAABB = nullptr;
         RemeshType m_type;
+
+
     };
 }
 #endif //LPCVT_RECON_REMESH_H

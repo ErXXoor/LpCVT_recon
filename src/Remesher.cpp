@@ -25,11 +25,17 @@ namespace LpCVT {
     }
 
     void Remesher::Remeshing(unsigned int nb_pts,
-                             unsigned int nb_iter) {
+                             unsigned int nb_iter,
+                             std::vector<double> constrain_points) {
         GEO::Logger::div("Set metric weight");
         GEO::Logger::div("Generate random samples");
 
         m_cvt->compute_initial_sampling(nb_pts);
+
+        if(constrain_points.size()>0){
+            m_cvt->set_constrain_points(constrain_points);
+        }
+
 
         GEO::Logger::div("Optimize sampling");
         GEO::ProgressTask progress("Optimize sampling", nb_iter);
