@@ -28,8 +28,10 @@ int main(int argc, char **argv) {
     int degree = 2;
     bool post_process = false;
     std::string constrain_id;
+    auto vor_path="";
+    auto vor_region_path="";
 
-    if (argc == 10) {
+    if (argc == 12) {
         input_filename = argv[1];
         output_filename = argv[2];
         dim = std::stoi(argv[3]);
@@ -39,6 +41,8 @@ int main(int argc, char **argv) {
         metric_weight = std::stod(argv[7]);
         post_process = std::string(argv[8]) == "true";
         constrain_id = argv[9];
+        vor_path = argv[10];
+        vor_region_path = argv[11];
     } else {
         std::cout << "Parameter length error" << std::endl;
         return 1;
@@ -53,8 +57,6 @@ int main(int argc, char **argv) {
         LpCVT::MeshAdaptor::Convert(*mesh, M);
     } else {
         LpCVT::MeshAdaptor::HdMeshLoad(input_filename, M, dim);
-//        mesh_ori = std::make_shared<LpCVT::Mesh>();
-//        mesh_ori->LoadMesh(input_ori_filename);
     }
 
     std::istringstream stream(constrain_id);
@@ -95,10 +97,13 @@ int main(int argc, char **argv) {
     remesher.Remeshing(nb_pts, iteration, constrain_verts);
     GEO::Mesh M_out;
     remesher.GetRDT(M_out, post_process);
-//    remesher.GetRVD(M_out);
-//    remesher.GetHDRDT(M_out);
-
     LpCVT::MeshAdaptor::SaveGEOMesh(output_filename, M_out);
-//    LpCVT::MeshAdaptor::HdMeshSave(output_filename, M_out);
+
+    GEO::Mesh M_vor;
+    if(vor_path!=""){
+        remesher.GetRVD(M_vor);
+        LpCVT::MeshAdaptor::SaveGEOMesh(vor_path, M_vor);
+        LpCVT::MeshAdaptor::SaveVoronoiID(M_vor, vor_region_path);
+    }
 
 }

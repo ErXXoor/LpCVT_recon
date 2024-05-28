@@ -136,4 +136,26 @@ namespace LpCVT {
         }
     }
 
+    void MeshAdaptor::SaveVoronoiID(const GEO::Mesh &M_out,const std::string &filepath) {
+        GEO::Logger::div("Get Voronoi ID");
+        GEO::Attribute<GEO::index_t> facet_region;
+        facet_region.bind_if_is_defined(M_out.facets.attributes(), "region");
+        if(!facet_region.is_bound()){
+            GEO::Logger::err("Vornoi_idx") << "Missing \"region\" facets attribute"
+                                           << std::endl;
+            return;
+        }
+
+        std::ofstream out(filepath);
+        if (!out.is_open()) {
+            std::cerr << "Error: cannot open file " << filepath << std::endl;
+            return;
+        }
+
+        out<<"face_id,region"<<std::endl;
+        for (auto i= 0; i < M_out.facets.nb(); i++) {
+            out <<i<<","<< facet_region[i] << std::endl;
+        }
+
+    }
 }

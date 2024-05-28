@@ -24,6 +24,8 @@ namespace LpCVT {
                                          int dim,
                                          GEO::Mesh &M);
 
+        static void SaveVoronoiID(const GEO::Mesh &M_out,const std::string &filepath);
+
     };
 }
 #endif //LPCVT_RECON_MESHADAPTOR_H
