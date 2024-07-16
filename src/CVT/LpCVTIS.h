@@ -65,7 +65,8 @@ namespace LpCVT {
         void grad_site(GEO::index_t site_id,
                        const GEOGen::Vertex &v,
                        const Eigen::Vector3d &N,
-                       const Eigen::VectorXd &dFdC);
+                       const Eigen::VectorXd &dFdC,
+                       const GEO::index_t t);
 
         void compute_W(const Eigen::Vector3d &N0,
                        const Eigen::Vector3d &N1,
