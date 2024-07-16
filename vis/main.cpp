@@ -2,102 +2,148 @@
 // Created by Hongbo on 2/17/24.
 //
 
-#include <igl/avg_edge_length.h>
-#include <igl/barycenter.h>
-#include <igl/frame_field_deformer.h>
-#include <igl/frame_to_cross_field.h>
-#include <igl/jet.h>
-#include <igl/local_basis.h>
-#include <igl/readDMAT.h>
-#include <igl/readOBJ.h>
-#include <igl/rotate_vectors.h>
-#include <igl/copyleft/comiso/nrosy.h>
-#include <igl/copyleft/comiso/miq.h>
-#include <igl/copyleft/comiso/frame_field.h>
+#include <igl/read_triangle_mesh.h>
+#include <igl/parula.h>
+#include <igl/remove_unreferenced.h>
 #include <igl/opengl/glfw/Viewer.h>
-#include <igl/PI.h>
-#include "Base/Mesh.h"
+#include <igl/per_face_normals.h>
+#include <igl/orient_halfedges.h>
+#include <igl/cr_vector_laplacian.h>
+#include <igl/cr_vector_mass.h>
+#include <igl/crouzeix_raviart_cotmatrix.h>
+#include <igl/crouzeix_raviart_massmatrix.h>
+#include <igl/edge_midpoints.h>
+#include <igl/edge_vectors.h>
+#include <igl/average_from_edges_onto_vertices.h>
+#include <igl/min_quad_with_fixed.h>
+#include <igl/heat_geodesics.h>
 
-static Eigen::RowVector3d RED(0.8, 0.2, 0.2);
-static Eigen::RowVector3d BLUE(0.2, 0.2, 0.8);
+#include <Eigen/Core>
+#include <Eigen/SparseCholesky>
+#include <Eigen/Geometry>
+
+#include <iostream>
+#include <set>
+#include <limits>
+#include <stdlib.h>
 
 int main(int argc, char *argv[]) {
-    using namespace Eigen;
+    typedef Eigen::SparseMatrix<double> SparseMat;
+    typedef Eigen::Matrix<double, 1, 1> Vector1d;
+    typedef Eigen::Matrix<int, 1, 1> Vector1i;
 
-    LpCVT::Mesh mesh;
-    mesh.LoadMesh("/Users/lihongbo/Downloads/research/gt_dataset/hd_output_opt/85537/85537_tmp.obj");
-    mesh.CalculateCurvature();
-//    mesh.CalculateCrossField();
-//
-    auto V = mesh.GetVertices();
-    auto F = mesh.GetFaces();
-//
+    //Constants used for smoothing
+    const double howMuchToSmoothBy = 1e-1;
+    const int howManySmoothingInterations = 50;
+
+    //Read our mesh
+    Eigen::MatrixXd V;
+    Eigen::MatrixXi F;
+    auto mesh_path = "/Users/lihongbo/Desktop/code/scripts/tmp/75118_sf_norm.obj";
+    igl::read_triangle_mesh(mesh_path, V, F);
+
+    //Compute vector Laplacian and mass matrix
+    Eigen::MatrixXi E, oE;//Compute Laplacian and mass matrix
+    SparseMat vecL, vecM;
+    igl::cr_vector_mass(V, F, E, vecM);
+    igl::cr_vector_laplacian(V, F, E, oE, vecL);
+    const int m = vecL.rows() / 2; //The number of edges in the mesh
+
+    //Convert the E / oE matrix format to list of edges / EMAP format required
+    // by the functions constructing scalar Crouzeix-Raviart functions
+    Eigen::MatrixXi Elist(m, 2), EMAP(3 * F.rows(), 1);
+    for (int i = 0; i < F.rows(); ++i) {
+        for (int j = 0; j < 3; ++j) {
+            const int e = E(i, j);
+            EMAP(i + j * F.rows()) = e;
+            if (oE(i, j) > 0) {
+                Elist.row(e) << F(i, (j + 1) % 3), F(i, (j + 2) % 3);
+            }
+        }
+    }
+    SparseMat scalarL, scalarM;
+    igl::crouzeix_raviart_massmatrix(V, F, Elist, EMAP, scalarM);
+    igl::crouzeix_raviart_cotmatrix(V, F, Elist, EMAP, scalarL);
+
+    //Compute edge midpoints & edge vectors
+    Eigen::MatrixXd edgeMps, parVec, perpVec;
+    igl::edge_midpoints(V, F, E, oE, edgeMps);
+    igl::edge_vectors(V, F, E, oE, parVec, perpVec);
+
+    //Perform the vector heat method
+    const int initialIndex = 888;
+    const double initialPara = 0.95, initialPerp = 0.08, initial_tmp = 0.01;
+    const double t = 0.01;
+
+    SparseMat Aeq;
+    Eigen::VectorXd Beq;
+    Eigen::VectorXi known = Eigen::Vector3i(initialIndex, initialIndex + m, initialIndex + 2 * m);
+    Eigen::VectorXd knownVals = Eigen::Vector3d(initialPara, initialPerp, initial_tmp);
+    Eigen::VectorXd Y0 = Eigen::VectorXd::Zero(3 * m), Yt;
+    Y0(initialIndex) = initialPara;
+    Y0(initialIndex + m) = initialPerp;
+    Y0(initialIndex + 2 * m) = initial_tmp;
+    igl::min_quad_with_fixed
+            (SparseMat(vecM + t * vecL), Eigen::VectorXd(-vecM * Y0), known, knownVals,
+             Aeq, Beq, false, Yt);
+
+    Eigen::VectorXd u0 = Eigen::VectorXd::Zero(m), ut;
+    u0(initialIndex) = sqrt(initialPara * initialPara + initialPerp * initialPerp);
+    Eigen::VectorXi knownScal = Vector1i(initialIndex);
+    Eigen::VectorXd knownScalVals = Vector1d(u0(initialIndex));
+    igl::min_quad_with_fixed
+            (SparseMat(scalarM + t * scalarL), Eigen::VectorXd(-scalarM * u0), knownScal,
+             knownScalVals, Aeq, Beq, false, ut);
+
+    Eigen::VectorXd phi0 = Eigen::VectorXd::Zero(m), phit;
+    phi0(initialIndex) = 1;
+    Eigen::VectorXd knownScalValsPhi = Vector1d(1);
+    igl::min_quad_with_fixed
+            (SparseMat(scalarM + t * scalarL), Eigen::VectorXd(-scalarM * phi0), knownScal,
+             knownScalValsPhi, Aeq, Beq, false, phit);
+
+    Eigen::ArrayXd Xtfactor = ut.array() /
+                              (phit.array() * (Yt.array().segment(0, m) * Yt.array().segment(0, m)
+                                               + Yt.array().segment(m, m) * Yt.array().segment(m, m)).sqrt());
+    Eigen::VectorXd Xt(2 * m);
+    Xt.segment(0, m) = Xtfactor * Yt.segment(0, m).array();
+    Xt.segment(m, m) = Xtfactor * Yt.segment(m, m).array();
+
+
+//    //Compute scalar heat colors
+//    igl::HeatGeodesicsData<double> hgData;
+//    igl::heat_geodesics_precompute(V, F, hgData);
+//    Eigen::VectorXd heatColor;
+//    Eigen::VectorXi gamma = Elist.row(initialIndex);
+//    igl::heat_geodesics_solve(hgData, gamma, heatColor);
+
+
+    //Convert vector field for plotting
+    Eigen::MatrixXd vecs(m, 3);
+    for (int i = 0; i < edgeMps.rows(); ++i) {
+        vecs.row(i) = Xt(i) * parVec.row(i) + Xt(i + edgeMps.rows()) * perpVec.row(i);
+    }
+
+
+    //Viewer that shows parallel transported vector
     igl::opengl::glfw::Viewer viewer;
     viewer.data().set_mesh(V, F);
-//
-    const double avg = igl::avg_edge_length(V, F);
-//
-//    auto cross_w = mesh.GetCrossFieldW();
-//    auto cross_v = mesh.GetCrossFieldV();
-//
-//    //Get center of each faces
-//    MatrixXd C;
-//    igl::barycenter(V, F, C);
-//    MatrixXd f_pd_min, f_pd_max;
-//    igl::barycenter(mesh.GetMinPD(), F, f_pd_min);
-//    igl::barycenter(mesh.GetMaxPD(), F, f_pd_max);
-//
-//    Eigen::VectorXi constrain_idx;
-//    constrain_idx.resize(V.rows());
-//    for (auto i = 0; i < V.rows(); i++) {
-//        constrain_idx(i) = i;
-//    }
-//
-////    Eigen::MatrixXd frame_w, frame_v;
-////    igl::copyleft::comiso::frame_field(V,
-////                                       F,
-////                                       constrain_idx,
-////                                       f_pd_min,
-////                                       f_pd_max,
-////                                       frame_w,
-////                                       frame_v);
-//
-//    Eigen::MatrixXd cross_w;
-////    igl::frame_to_cross_field(V, F, frame_w, frame_v, cross_w);
-//
-//    MatrixXd bc_x(constrain_idx.size(), 3);
-//    for (unsigned i = 0; i < constrain_idx.size(); ++i)
-////        bc_x.row(i) = cross_w.row(constrain_idx(i));
-//        bc_x.row(i) = f_pd_min.row(constrain_idx(i));
-//
-//    VectorXd S;
-//    igl::copyleft::comiso::nrosy(
-//            V,
-//            F,
-//            constrain_idx,
-//            bc_x,
-//            VectorXi(),
-//            VectorXd(),
-//            MatrixXd(),
-//            4,
-//            0,
-//            cross_w,
-//            S);
-//
-//    MatrixXd B1, B2, B3;
-//    igl::local_basis(V, F, B1, B2, B3);
-//    auto cross_v =
-//            igl::rotate_vectors(cross_w, VectorXd::Constant(1, igl::PI / 2), B1, B2);
+//    viewer.data().show_lines = false;
+//    viewer.data().set_data(heatColor.maxCoeff() - heatColor.array(), //invert colormap
+//                           igl::COLOR_MAP_TYPE_VIRIDIS);
+    const double s = 0.012; //How much to scale vectors during plotting
+    Eigen::MatrixXd vecColors(m, 3);
+    for (int i = 0; i < m; ++i) {
+        vecColors.row(i) << 0.1, 0.1, 0.1;
+    }
+    vecColors.row(initialIndex) << 0.9, 0.1, 0.1;
+    viewer.data().add_edges(edgeMps, edgeMps + s * vecs, vecColors);
 
-//    // Draw a red segment parallel to the maximal curvature direction
-//    viewer.data().add_edges(C, C + cross_w * avg, RED);
-//
-//    // Draw a blue segment parallel to the minimal curvature direction
-//    viewer.data().add_edges(C, C + cross_v * avg, BLUE);
-//
-//    // Hide wireframe
-    viewer.data().show_lines = false;
-
+    std::cout << R"(The red vector is parallel transported to every point on the surface.
+The surface is shaded by geodesic distance from the red vector.
+)"
+              << std::endl;
     viewer.launch();
 
+    return 0;
 }
