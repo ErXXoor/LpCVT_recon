@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.2)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project(LpCVT_recon)
 
 list(PREPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
