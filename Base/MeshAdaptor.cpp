@@ -25,6 +25,18 @@ namespace LpCVT {
         M_out.facets.connect();
     }
 
+    void MeshAdaptor::Convert(const Eigen::MatrixXd &points,GEO::Mesh &M_out) {
+        M_out.clear();
+        M_out.vertices.set_double_precision();
+        M_out.vertices.set_dimension(3);
+
+        for (auto i = 0; i < points.rows(); i++) {
+            std::vector<double> p{points(i, 0), points(i, 1), points(i, 2)};
+            M_out.vertices.create_vertex(p.data());
+        }
+
+    }
+
     void MeshAdaptor::SaveGEOMesh(const std::string &filepath, const GEO::Mesh &M_out) {
         GEO::MeshIOFlags flags;
         flags.set_attribute(GEO::MESH_ALL_ATTRIBUTES);

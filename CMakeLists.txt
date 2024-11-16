@@ -9,7 +9,21 @@ igl_include(glfw)
 igl_include(copyleft comiso)
 include(geogram)
 
+find_package(PCL REQUIRED COMPONENTS common io filters)
+
 set(CMAKE_CXX_STANDARD 11)
 add_subdirectory(Base)
-add_subdirectory(src)
-add_subdirectory(vis)
+
+set(COMPILE_NMCVT_MESH OFF)
+set(COMPILE_VIS OFF)
+set(COMPILE_NMCVT_PC ON)
+
+if (COMPILE_NMCVT_MESH)
+    add_subdirectory(src)
+endif ()
+if (COMPILE_VIS)
+    add_subdirectory(vis)
+endif ()
+if (COMPILE_NMCVT_PC)
+    add_subdirectory(src_pc)
+endif ()
