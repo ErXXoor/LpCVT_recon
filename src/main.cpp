@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
     int degree = 2;
     bool post_process = false;
     std::string constrain_id;
-    auto vor_path="";
+    std::string vor_path;
     auto vor_region_path="";
 
     if (argc == 12) {
@@ -100,10 +100,9 @@ int main(int argc, char **argv) {
     LpCVT::MeshAdaptor::SaveGEOMesh(output_filename, M_out);
 
     GEO::Mesh M_vor;
-    if(vor_path!=""){
+    if(!vor_path.empty()) {
         remesher.GetRVD(M_vor);
         LpCVT::MeshAdaptor::SaveGEOMesh(vor_path, M_vor);
         LpCVT::MeshAdaptor::SaveVoronoiID(M_vor, vor_region_path);
     }
-
 }
