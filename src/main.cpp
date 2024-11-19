@@ -31,6 +31,7 @@ int main(int argc, char **argv) {
     std::string vor_path;
     auto vor_region_path="";
 
+
     if (argc == 12) {
         input_filename = argv[1];
         output_filename = argv[2];
@@ -61,7 +62,7 @@ int main(int argc, char **argv) {
 
     std::istringstream stream(constrain_id);
     std::vector<int> constrain_ids;
-    if(!constrain_id.empty()){
+    if (!constrain_id.empty()) {
         int id;
         while (stream >> id) {
             constrain_ids.push_back(id);
@@ -75,21 +76,20 @@ int main(int argc, char **argv) {
         }
     }
 
-    auto remesh_type = LpCVT::Remesher::RemeshType::L2CVT;
+    auto remesh_type = LpCVT::Remesher::RemeshType::L8CVT;
     GEO::SmartPointer<LpCVT::LpCVTIS> is;
     is = new LpCVT::LpCVTIS(M, false, dim, degree, metric_weight);
     if (remesh_type == LpCVT::Remesher::RemeshType::L8CVT) {
-
         if (dim > 3) {
-            mesh_ori->CalculateCurvature();
-            is->set_mesh(mesh_ori);
+            //            mesh_ori->CalculateCurvature();
+            //            is->set_mesh(mesh_ori);
         } else {
-//            mesh->CalculateCurvature();
-//            mesh->CalculateCrossField();
+            mesh->CalculateCurvature();
+            mesh->CalculateCrossField();
             is->set_mesh(mesh);
         }
         is->set_metric_type(LpCVT::LpCVTIS::MetricType::Quad);
-//        is->CalQuadMetric();
+        //        is->CalQuadMetric();
     }
 
     LpCVT::Remesher remesher;
@@ -101,6 +101,7 @@ int main(int argc, char **argv) {
 
     GEO::Mesh M_vor;
     if(!vor_path.empty()) {
+
         remesher.GetRVD(M_vor);
         LpCVT::MeshAdaptor::SaveGEOMesh(vor_path, M_vor);
         LpCVT::MeshAdaptor::SaveVoronoiID(M_vor, vor_region_path);

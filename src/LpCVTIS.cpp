@@ -5,8 +5,10 @@
 #include <geogram/voronoi/generic_RVD.h>
 #include <geogram/basic/smart_pointer.h>
 #include <geogram/basic/geometry_nd.h>
+#include <geogram/numerics/predicates.h>
 #include <stan/math/rev/core/chainablestack.hpp>
 #include <igl/rotation_matrix_from_directions.h>
+#include <geogram/basic/process.h>
 
 namespace LpCVT {
     void point2vec(const double *point,
@@ -182,7 +184,7 @@ namespace LpCVT {
         Eigen::Vector3d N = (p2_vec3 - p1_vec3).cross(p3_vec3 - p1_vec3);
         N.normalize();
 
-        if (m_metric_type == MetricType::Quad) {
+//        if (m_metric_type == MetricType::Quad) {
 //            auto mid_tmp = (p1_vec3 + p2_vec3 + p3_vec3) / 3.0;
 //            auto mid = GEO::vec3(mid_tmp[0], mid_tmp[1], mid_tmp[2]);
 //            auto f_id = m_facetsAABB->nearest_facet(mid);
@@ -191,12 +193,12 @@ namespace LpCVT {
 //            metric.col(2) = N;
 
 //            M.block<3, 3>(0, 0) = m_quad_metric[t];
-        } else {
-            Eigen::Matrix3d N_mat3 = N * N.transpose();
-            N_mat3 = N_mat3 * m_metric_weight;
+//        } else {
+        Eigen::Matrix3d N_mat3 = N * N.transpose();
+        N_mat3 = N_mat3 * m_metric_weight;
 
-            M.block<3, 3>(0, 0) += N_mat3;
-        }
+        M.block<3, 3>(0, 0) += N_mat3;
+//        }
 
         Eigen::VectorXd dFdp1, dFdp2, dFdp3;
 
@@ -204,13 +206,16 @@ namespace LpCVT {
         stan::math::ChainableStack stack_;
         double f = eval_ad(p0_vec, p1_vec, p2_vec, p3_vec, M, dFdp1, dFdp2, dFdp3);
 
-//        grad_site(v, p1, N, dFdp1);
-//        grad_site(v, p2, N, dFdp2);
-//        grad_site(v, p3, N, dFdp3);
+        Eigen::VectorXd dFdX = -dFdp1 - dFdp2 - dFdp3;
+        add_grad(dFdX, v);
 
-        for (auto i = 0; i < m_dim; i++) {
-            g_[m_dim * v + i] += -dFdp1[i] - dFdp2[i] - dFdp3[i];
-        }
+        grad_site(v, p1, N, dFdp1, t);
+        grad_site(v, p2, N, dFdp2, t);
+        grad_site(v, p3, N, dFdp3, t);
+
+//        for (auto i = 0; i < m_dim; i++) {
+//            g_[m_dim * v + i] += -dFdp1[i] - dFdp2[i] - dFdp3[i];
+//        }
 
         return f;
     }
@@ -392,6 +397,7 @@ namespace LpCVT {
             dTdU2 = U2_T.adj();
             dTdU3 = U3_T.adj();
         }
+
         dFdp1 = M.transpose() * (E.val() * dTdU1 + T.val() * dEdU1);
         dFdp2 = M.transpose() * (E.val() * dTdU2 + T.val() * dEdU2);
         dFdp3 = M.transpose() * (E.val() * dTdU3 + T.val() * dEdU3);
@@ -478,9 +484,11 @@ namespace LpCVT {
     }
 
     void LpCVTIS::add_grad(Eigen::VectorXd grad, GEO::index_t site_id) {
+        GEO::Process::enter_critical_section();
         for (auto i = 0; i < m_dim; i++) {
             g_[m_dim * site_id + i] += grad[i];
         }
+        GEO::Process::leave_critical_section();
     }
 
     void LpCVTIS::compute_W(const Eigen::Vector3d &N0,
@@ -498,11 +506,35 @@ namespace LpCVT {
         W1 *= Tinv;
     }
 
-    void intersect_geom(Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> &site_a,
+    void intersect_stan(Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> &site_a,
                         Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> &site_b,
                         Eigen::VectorXd &edg_v1,
                         Eigen::VectorXd &edg_v2,
                         Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> &C
+    ) {
+        Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> n = site_a - site_b;
+        stan::math::var d = -n.dot(site_a + site_b);
+        stan::math::var l1 = edg_v2.dot(n);
+        stan::math::var l2 = edg_v1.dot(n);
+        d = 0.5 * d;
+        l1 = stan::math::fabs(l1 + d);
+        l2 = stan::math::fabs(l2 + d);
+
+        l1 = stan::math::if_else(l1 > 1e-10, l1, 0.0);
+        l2 = stan::math::if_else(l2 > 1e-10, l2, 0.0);
+
+        stan::math::var l = l1 + l2;
+        stan::math::var l1_pt = stan::math::if_else(l > 1e-20, l1 / l, 0.5);
+        stan::math::var l2_pt = stan::math::if_else(l > 1e-20, l2 / l, 0.5);
+
+        C = l1_pt * edg_v1 + l2_pt * edg_v2;
+    }
+
+    void intersect_stan_tmp(Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> &site_a,
+                            Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> &site_b,
+                            Eigen::VectorXd &edg_v1,
+                            Eigen::VectorXd &edg_v2,
+                            Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> &C
     ) {
         Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> n = site_a - site_b;
         stan::math::var d = -n.dot(site_a + site_b);
@@ -517,14 +549,35 @@ namespace LpCVT {
         C = l1 * edg_v1 + l2 * edg_v2;
     }
 
+
+    void intersect_geom(const Eigen::VectorXd &site_a,
+                        const Eigen::VectorXd &site_b,
+                        const Eigen::VectorXd &edg_v1,
+                        const Eigen::VectorXd &edg_v2,
+                        Eigen::VectorXd &I) {
+        Eigen::VectorXd n = site_a - site_b;
+        double d = -n.dot(site_a + site_b);
+        double l1 = edg_v2.dot(n);
+        double l2 = edg_v1.dot(n);
+        d = 0.5 * d;
+        l1 = std::fabs(l1 + d);
+        l2 = std::fabs(l2 + d);
+        double l = l1 + l2;
+        l1 = (l > 1e-30) ? l1 / l : 0.5;
+        l2 = (l > 1e-30) ? l2 / l : 0.5;
+        I = l1 * edg_v1 + l2 * edg_v2;
+    }
+
     void LpCVTIS::grad_site(GEO::index_t site_id,
                             const GEOGen::Vertex &C,
                             const Eigen::Vector3d &N,
-                            const Eigen::VectorXd &dFdC) {
+                            const Eigen::VectorXd &dFdC,
+                            const GEO::index_t t) {
 
 
         Eigen::VectorXd site_vec;
-        point2vec(vertex_ptr(site_id), m_dim, site_vec);
+        auto site_a = vertex_ptr(site_id);
+        point2vec(site_a, m_dim, site_vec);
 
         Eigen::VectorXd C_vec;
         point2vec(C.point(), m_dim, C_vec);
@@ -551,7 +604,7 @@ namespace LpCVT {
                         mesh_.vertices.point_ptr(edg_v2_idx), m_dim, edg_v2);
 
                 Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> C_ad;
-                intersect_geom(site_ad, site_b_ad, edg_v1, edg_v2, C_ad);
+                intersect_stan(site_ad, site_b_ad, edg_v1, edg_v2, C_ad);
 
                 //site gradient
                 Eigen::MatrixXd J_site, J_site_b;
@@ -591,31 +644,136 @@ namespace LpCVT {
                 Eigen::VectorXd site_c_vec;
                 point2vec(site_c, m_dim, site_c_vec);
 
+                auto tri_0 = this->mesh_.vertices.point_ptr(this->mesh_.facets.vertex(t, 0));
+                auto tri_1 = this->mesh_.vertices.point_ptr(this->mesh_.facets.vertex(t, 1));
+                auto tri_2 = this->mesh_.vertices.point_ptr(this->mesh_.facets.vertex(t, 2));
 
-                Eigen::Vector3d W0, W1;
-                compute_W((site_b_vec - site_vec).head<3>(),
-                          (site_c_vec - site_vec).head<3>(),
-                          N, W0, W1);
+                Eigen::VectorXd tri_0_vec;
+                point2vec(tri_0, m_dim, tri_0_vec);
+                Eigen::VectorXd tri_1_vec;
+                point2vec(tri_1, m_dim, tri_1_vec);
+                Eigen::VectorXd tri_2_vec;
+                point2vec(tri_2, m_dim, tri_2_vec);
 
-                Eigen::Matrix3d J;
-                //============= dC/dp0
-                auto d0 = C_vec - site_vec;
-                auto W = W0 + W1;
-                J = d0 * W.transpose();
-                Eigen::Vector3d dFdCJ_ = J * dFdC;
-                add_grad(dFdCJ_, site_id);
+                GEO::Sign tri_0_sign = GEO::PCK::side1_SOS(site_a, site_b, tri_0, m_dim);
+                GEO::Sign tri_1_sign = GEO::PCK::side1_SOS(site_a, site_b, tri_1, m_dim);
+                GEO::Sign tri_2_sign = GEO::PCK::side1_SOS(site_a, site_b, tri_2, m_dim);
 
-                //============= dC/dp1
-                auto d1 = site_b_vec - C_vec;
-                J = d1 * W0.transpose();
-                dFdCJ_ = J * dFdC;
-                add_grad(dFdCJ_, b);
+                Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> site_ad = site_vec;
+                Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> site_b_ad = site_b_vec;
 
-                //============= dC/dp2
-                auto d2 = site_c_vec - C_vec;
-                J = d2 * W1.transpose();
-                dFdCJ_ = J * dFdC;
-                add_grad(dFdCJ_, c);
+                Eigen::VectorXd I_0, I_1;
+                if (tri_0_sign != tri_1_sign) {
+                    intersect_geom(site_vec, site_b_vec, tri_0_vec, tri_1_vec, I_0);
+                    if (tri_0_sign != tri_2_sign) {
+                        intersect_geom(site_vec, site_b_vec, tri_0_vec, tri_2_vec, I_1);
+                    } else {
+                        intersect_geom(site_vec, site_b_vec, tri_1_vec, tri_2_vec, I_1);
+                    }
+                } else if (tri_0_sign != tri_2_sign) {
+                    intersect_geom(site_vec, site_b_vec, tri_0_vec, tri_2_vec, I_0);
+                    intersect_geom(site_vec, site_b_vec, tri_1_vec, tri_2_vec, I_1);
+                }
+
+                GEO::Sign tri_3_sign = GEO::PCK::side1_SOS(site_a, site_c, tri_0, m_dim);
+                GEO::Sign tri_4_sign = GEO::PCK::side1_SOS(site_a, site_c, tri_1, m_dim);
+                GEO::Sign tri_5_sign = GEO::PCK::side1_SOS(site_a, site_c, tri_2, m_dim);
+
+                Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> site_ad_1 = site_vec;
+                Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> site_c_ad = site_c_vec;
+
+                Eigen::VectorXd I_2, I_3;
+                if (tri_3_sign != tri_4_sign) {
+                    intersect_geom(site_vec, site_c_vec, tri_0_vec, tri_1_vec, I_2);
+                    if (tri_3_sign != tri_5_sign) {
+                        intersect_geom(site_vec, site_c_vec, tri_0_vec, tri_2_vec, I_3);
+                    } else {
+                        intersect_geom(site_vec, site_c_vec, tri_1_vec, tri_2_vec, I_3);
+                    }
+                } else if (tri_3_sign != tri_5_sign) {
+                    intersect_geom(site_vec, site_c_vec, tri_0_vec, tri_2_vec, I_2);
+                    intersect_geom(site_vec, site_c_vec, tri_1_vec, tri_2_vec, I_3);
+                }
+
+                Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1> C_ad, C_ad_1;
+                intersect_stan(site_ad, site_b_ad, I_2, I_3, C_ad);
+                intersect_stan(site_ad_1, site_c_ad, I_0, I_1, C_ad_1);
+
+                Eigen::MatrixXd J_site, J_site_b;
+                J_site.resize(C_ad.rows(), site_ad.rows());
+                J_site_b.resize(C_ad.rows(), site_b_ad.rows());
+                for (auto i = 0; i < C_ad.rows(); i++) {
+                    if (i > 0) {
+                        stan::math::set_zero_all_adjoints();
+                    }
+                    C_ad(i).grad();
+                    for (auto j = 0; j < site_ad.rows(); j++) {
+                        J_site(i, j) = site_ad(j).adj();
+                        J_site_b(i, j) = site_b_ad(j).adj();
+                    }
+                }
+
+                Eigen::MatrixXd J_site_1, J_site_c;
+                J_site_1.resize(C_ad_1.rows(), site_ad_1.rows());
+                J_site_c.resize(C_ad_1.rows(), site_c_ad.rows());
+                for (auto i = 0; i < C_ad_1.rows(); i++) {
+                    if (i > 0) {
+                        stan::math::set_zero_all_adjoints();
+                    }
+                    C_ad_1(i).grad();
+                    for (auto j = 0; j < site_ad_1.rows(); j++) {
+                        J_site_1(i, j) = site_ad_1(j).adj();
+                        J_site_c(i, j) = site_c_ad(j).adj();
+                    }
+                }
+
+                Eigen::VectorXd dFdCJ = dFdC.transpose() * (J_site + J_site_1);
+                add_grad(dFdCJ, site_id);
+
+                Eigen::VectorXd dFdCJ_b = dFdC.transpose() * J_site_b;
+                add_grad(dFdCJ_b, b);
+
+                Eigen::VectorXd dFdCJ_c = dFdC.transpose() * J_site_c;
+                add_grad(dFdCJ_c, c);
+
+//                Eigen::Vector3d W0, W1;
+//                compute_W((site_b_vec - site_vec).head<3>(),
+//                          (site_c_vec - site_vec).head<3>(),
+//                          N, W0, W1);
+//
+//                Eigen::Vector3d uuu = ((C_vec - site_vec) * (W0.transpose() + W1.transpose())) * dFdC;
+//                Eigen::Vector3d uuu_1 = dFdC.transpose() * (J_site + J_site_1);
+//                Eigen::Vector3d vvv = uuu - dFdCJ;
+//                Eigen::Vector3d ttt = (site_c_vec - C_vec) * W1.transpose() * dFdC;
+//                Eigen::Vector3d ttt_1 = dFdC.transpose() * J_site_c;
+//                Eigen::Vector3d ooo = ttt - dFdCJ_c;
+//                auto ddd = 0;
+
+
+//                Eigen::Vector3d W0, W1;
+//                compute_W((site_b_vec - site_vec).head<3>(),
+//                          (site_c_vec - site_vec).head<3>(),
+//                          N, W0, W1);
+//
+//                Eigen::Matrix3d J;
+//                //============= dC/dp0
+//                auto d0 = C_vec - site_vec;
+//                auto W = W0 + W1;
+//                J = d0 * W.transpose();
+//                Eigen::Vector3d dFdCJ_ = J * dFdC;
+//                add_grad(dFdCJ_, site_id);
+//
+//                //============= dC/dp1
+//                auto d1 = site_b_vec - C_vec;
+//                J = d1 * W0.transpose();
+//                dFdCJ_ = J * dFdC;
+//                add_grad(dFdCJ_, b);
+//
+//                //============= dC/dp2
+//                auto d2 = site_c_vec - C_vec;
+//                J = d2 * W1.transpose();
+//                dFdCJ_ = J * dFdC;
+//                add_grad(dFdCJ_, c);
                 break;
             }
             default:
