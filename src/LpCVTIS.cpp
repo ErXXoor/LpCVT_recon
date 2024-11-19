@@ -160,6 +160,8 @@ namespace LpCVT {
             GEO::index_t t_adj,
             GEO::index_t v_adj
     ) {
+
+
         // Compute normal of the triangle
         auto p0 = vertex_ptr(v);
         Eigen::VectorXd p1_vec, p2_vec, p3_vec, p0_vec;
