@@ -5,17 +5,29 @@
 #ifndef LPCVT_RECON_CO3NE_NM_H
 #define LPCVT_RECON_CO3NE_NM_H
 #include <geogram/points/co3ne.h>
-#include <geogram/points/kd_tree.h>
 #include <geogram/mesh/mesh.h>
-#include <Eigen/Dense>
+#include "Co3neCVT.h"
+#include "NMCVT/LpCVTIS.h"
+#include <geogram/basic/smart_pointer.h>
 namespace NMCVT_PC{
     class Co3ne_NM{
       public:
         Co3ne_NM() = default;
         ~Co3ne_NM() = default;
 
-        void Reconstruct(Eigen::MatrixXd &points, GEO::Mesh &M);
+        void Reconstruct(Eigen::MatrixXd &points,
+                         unsigned int nb_pts,
+                         unsigned int nb_iter);
         void Smooth(GEO::Mesh &M,int nb_neighbors,int nb_iterations);
+        void GetRDT(GEO::Mesh &M_out, bool post_process=true);
+        void GetReconstructedMesh(LpCVT::Mesh &M_out);
+      private:
+        std::shared_ptr<GEO::Mesh> m_mesh;
+        std::shared_ptr<Co3neCVT> m_cvt_core;
+        GEO::SmartPointer<LpCVT::LpCVTIS> m_is;
+
+      public:
+
     };
 }
 

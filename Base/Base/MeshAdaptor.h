@@ -15,7 +15,11 @@ namespace LpCVT {
 
         static void Convert(const Eigen::MatrixXd &points, GEO::Mesh &M_out);
 
+        static void Convert(std::shared_ptr<GEO::Mesh> mesh_in, Mesh &mesh_out);
+
         static void SaveGEOMesh(const std::string &filepath, const GEO::Mesh &M_out);
+
+        static void SaveBaseMesh(const std::string &filepath, const Mesh &mesh_out);
 
         static void HdMeshLoad(const std::string &filepath, GEO::Mesh &mesh_out, int dim);
 

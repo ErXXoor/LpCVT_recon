@@ -51,4 +51,5 @@ bool PointCloud::LoadFromXYZ(const std::string &filename) {
     }
     return true;
 }
+
 }

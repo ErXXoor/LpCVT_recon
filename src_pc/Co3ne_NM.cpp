@@ -6,22 +6,26 @@
 #include <geogram/mesh/mesh_geometry.h>
 #include <geogram/mesh/mesh_repair.h>
 #include "CVT_PC/Co3neT.h"
-#include "CVT_PC/Co3neRVD.h"
+#include <geogram/points/kd_tree.h>
+
 
 namespace NMCVT_PC{
 
-    void Co3ne_NM::Reconstruct(Eigen::MatrixXd &points, GEO::Mesh &M) {
-        LpCVT::MeshAdaptor::Convert(points, M);
-        double R = GEO::bbox_diagonal(M);
-        GEO::mesh_repair(M, GEO::MESH_REPAIR_COLOCATE, 1e-6*R);
-
-//        Smooth(M,)
+    void Co3ne_NM::Reconstruct(Eigen::MatrixXd &points,unsigned int nb_pts,unsigned int nb_iter) {
+        m_mesh = std::make_shared<Mesh>();
+        LpCVT::MeshAdaptor::Convert(points, *m_mesh);
+        double R = GEO::bbox_diagonal(*m_mesh);
+        GEO::mesh_repair(*m_mesh, GEO::MESH_REPAIR_COLOCATE, 1e-6*R);
 
         auto radius = 0.01*R*5.0;
-//        GEO::Co3Ne_reconstruct(M, radius);
-        Co3neT co3ne(M);
-        co3ne.reconstruct(radius);
+        m_cvt_core = std::make_shared<Co3neCVT>(m_mesh);
+        m_is = new LpCVT::LpCVTIS(*m_mesh,false, 3,2,4);
+
+        m_cvt_core->SurfaceRecon(radius);
+//        m_cvt_core->InitRemeshing(m_is);
+//        m_cvt_core->NMRemeshing(nb_pts, nb_iter);
     }
+
     void Co3ne_NM::Smooth(Mesh& M, int nb_neighbors, int nb_iterations) {
         Co3neT co3ne(M);
         try {
@@ -37,6 +41,14 @@ namespace NMCVT_PC{
         }
         catch(const TaskCanceled&) {
         }
+    }
+
+    void Co3ne_NM::GetRDT(GEO::Mesh &M_out, bool post_process) {
+        m_cvt_core->GetRDT(M_out, post_process);
+    }
+
+    void Co3ne_NM::GetReconstructedMesh(LpCVT::Mesh &M_out) {
+        LpCVT::MeshAdaptor::Convert(m_mesh, M_out);
     }
 
 }

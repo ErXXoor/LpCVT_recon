@@ -13,6 +13,7 @@ find_package(PCL REQUIRED COMPONENTS common io filters)
 
 set(CMAKE_CXX_STANDARD 11)
 add_subdirectory(Base)
+add_subdirectory(NMCVT)
 
 set(COMPILE_NMCVT_MESH OFF)
 set(COMPILE_VIS OFF)

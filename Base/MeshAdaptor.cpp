@@ -4,6 +4,7 @@
 #include "Base/MeshAdaptor.h"
 #include <geogram/mesh/mesh_io.h>
 #include <geogram/basic/line_stream.h>
+#include <igl/writeOBJ.h>
 
 namespace LpCVT {
     void MeshAdaptor::Convert(const Mesh &mesh_in, GEO::Mesh &M_out) {
@@ -37,11 +38,37 @@ namespace LpCVT {
 
     }
 
+    void MeshAdaptor::Convert(std::shared_ptr<GEO::Mesh> mesh_in, Mesh &mesh_out) {
+        Eigen::MatrixXd verts(mesh_in->vertices.nb(), 3);
+        for (auto i = 0; i < mesh_in->vertices.nb(); i++) {
+            for (auto j = 0; j < 3; j++) {
+                verts(i, j) = mesh_in->vertices.point_ptr(i)[j];
+            }
+        }
+        mesh_out.m_v = verts;
+
+        Eigen::MatrixXi faces(mesh_in->facets.nb(), 3);
+        for (auto i = 0; i < mesh_in->facets.nb(); i++) {
+            for (auto j = 0; j < 3; j++) {
+                faces(i, j) = mesh_in->facets.vertex(i, j);
+            }
+        }
+        mesh_out.m_f = faces;
+    }
+
     void MeshAdaptor::SaveGEOMesh(const std::string &filepath, const GEO::Mesh &M_out) {
         GEO::MeshIOFlags flags;
         flags.set_attribute(GEO::MESH_ALL_ATTRIBUTES);
         flags.set_dimension(8);
         GEO::mesh_save(M_out, filepath, flags);
+    }
+
+    void MeshAdaptor::SaveBaseMesh(const std::string &filepath, const LpCVT::Mesh &mesh_out) {
+        if (igl::writeOBJ(filepath, mesh_out.m_v, mesh_out.m_f)) {
+            std::cout << "Successfully wrote the OBJ file!" << std::endl;
+        } else {
+            std::cerr << "Failed to write the OBJ file." << std::endl;
+        }
     }
 
     void MeshAdaptor::HdMeshLoad(const std::string &filepath, GEO::Mesh &mesh_out, int dim) {
