@@ -207,9 +207,9 @@ namespace LpCVT {
         Eigen::VectorXd dFdX = -dFdp1 - dFdp2 - dFdp3;
         add_grad(dFdX, v);
 
-        grad_site(v, p1, N, dFdp1, t);
-        grad_site(v, p2, N, dFdp2, t);
-        grad_site(v, p3, N, dFdp3, t);
+//        grad_site(v, p1, N, dFdp1, t);
+//        grad_site(v, p2, N, dFdp2, t);
+//        grad_site(v, p3, N, dFdp3, t);
 
 //        for (auto i = 0; i < m_dim; i++) {
 //            g_[m_dim * v + i] += -dFdp1[i] - dFdp2[i] - dFdp3[i];
@@ -482,11 +482,9 @@ namespace LpCVT {
     }
 
     void LpCVTIS::add_grad(Eigen::VectorXd grad, GEO::index_t site_id) {
-        GEO::Process::enter_critical_section();
         for (auto i = 0; i < m_dim; i++) {
             g_[m_dim * site_id + i] += grad[i];
         }
-        GEO::Process::leave_critical_section();
     }
 
     void LpCVTIS::compute_W(const Eigen::Vector3d &N0,

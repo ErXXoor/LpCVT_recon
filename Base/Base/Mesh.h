@@ -20,8 +20,6 @@ namespace LpCVT {
 
         bool CalculateCurvature();
 
-        void CalculateCrossField();
-
         bool NormalizeMesh();
 
         void PlotMesh();
