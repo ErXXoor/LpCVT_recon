@@ -6,3 +6,4 @@ result/
 tmp/
 .cache/
 build/
+.vscode/

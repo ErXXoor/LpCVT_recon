@@ -85,7 +85,6 @@ int main(int argc, char **argv) {
             //            is->set_mesh(mesh_ori);
         } else {
             mesh->CalculateCurvature();
-            mesh->CalculateCrossField();
             is->set_mesh(mesh);
         }
         is->set_metric_type(LpCVT::LpCVTIS::MetricType::Quad);
