@@ -7,8 +7,6 @@
 
 #include <geogram/voronoi/CVT.h>
 #include <geogram/voronoi/integration_simplex.h>
-#include "Base/NNSearch.h"
-#include <memory>
 namespace LpCVT {
     class LpCVTWrap : public GEO::CentroidalVoronoiTesselation {
     public:
@@ -18,8 +16,6 @@ namespace LpCVT {
         void newiteration() override;
 
         void set_constrain_points(std::vector<double> constrain_points);
-    private:
-        std::shared_ptr<Base::NNSearch> nn_search;
     };
 }
 #endif //LPCVT_RECON_LPCVTWRAP_H

@@ -8,7 +8,6 @@
 #include <geogram/numerics/predicates.h>
 #include <stan/math/rev/core/chainablestack.hpp>
 #include <igl/rotation_matrix_from_directions.h>
-#include <geogram/basic/process.h>
 
 namespace LpCVT {
     void point2vec(const double *point,
@@ -26,14 +25,6 @@ namespace LpCVT {
         vec = Eigen::Matrix<stan::math::var, Eigen::Dynamic, 1>::Zero(dim);
         for (unsigned int i = 0; i < dim; i++) {
             vec(i) = point[i];
-        }
-    }
-
-    void soft_zero(Eigen::Vector3d &vec, double eps = 1e-10) {
-        for (auto i = 0; i < vec.size(); i++) {
-            if (::fabs(vec[i]) < eps) {
-                vec[i] = 0.0;
-            }
         }
     }
 
