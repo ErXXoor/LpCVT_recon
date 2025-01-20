@@ -4,6 +4,7 @@
 #include "CVT/Remesher.h"
 #include <geogram/basic/logger.h>
 #include <geogram/basic/progress.h>
+#include "Base/NNSearch.h"
 
 namespace LpCVT {
     void Remesher::Init(GEO::Mesh *M_in,
@@ -61,6 +62,25 @@ namespace LpCVT {
 
         if (post_process) {
             m_cvt->compute_surface(&M_out, true);
+            GEO::vector<double> points;
+            for (auto i = 0; i < M_out.vertices.nb(); i++) {
+                for (auto j = 0; j < M_out.vertices.dimension(); j++) {
+                    points.push_back(M_out.vertices.point_ptr(i)[j]);
+                }
+            }
+
+            Base::NNSearch search(3);
+            search.ConstructKDTree(*(m_cvt->mesh()));
+
+            GEO::vector<double> nearest;
+            search.QueryPointSet(points, nearest);
+
+            for(auto i=0;i<M_out.vertices.nb();i++){
+                for(auto j=0;j<M_out.vertices.dimension();j++){
+                    M_out.vertices.point_ptr(i)[j] = nearest[i*M_out.vertices.dimension()+j];
+                }
+            }
+
         } else {
             m_cvt->RVD()->set_exact_predicates(true);
             auto mode_i = GEO::RestrictedVoronoiDiagram::RDT_RVC_CENTROIDS |
