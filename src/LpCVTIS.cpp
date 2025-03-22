@@ -175,21 +175,10 @@ namespace LpCVT {
         Eigen::Vector3d N = (p2_vec3 - p1_vec3).cross(p3_vec3 - p1_vec3);
         N.normalize();
 
-//        if (m_metric_type == MetricType::Quad) {
-//            auto mid_tmp = (p1_vec3 + p2_vec3 + p3_vec3) / 3.0;
-//            auto mid = GEO::vec3(mid_tmp[0], mid_tmp[1], mid_tmp[2]);
-//            auto f_id = m_facetsAABB->nearest_facet(mid);
-//            auto metric = m_quad_metric[t];
-//            Eigen::Vector3d normal = m_quad_metric[f_id].col(2);
-//            metric.col(2) = N;
-
-//            M.block<3, 3>(0, 0) = m_quad_metric[t];
-//        } else {
         Eigen::Matrix3d N_mat3 = N * N.transpose();
         N_mat3 = N_mat3 * m_metric_weight;
 
         M.block<3, 3>(0, 0) += N_mat3;
-//        }
 
         Eigen::VectorXd dFdp1, dFdp2, dFdp3;
 
