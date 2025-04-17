@@ -51,6 +51,7 @@ namespace LpCVT {
         m_cvt->set_progress_logger(nullptr);
     }
 
+
     void Remesher::GetRVD(GEO::Mesh &M_out) {
         GEO::Logger::div("Generate RVD");
         m_cvt->RVD()->set_exact_predicates(true);
@@ -62,24 +63,6 @@ namespace LpCVT {
 
         if (post_process) {
             m_cvt->compute_surface(&M_out, true);
-//            GEO::vector<double> points;
-//            for (auto i = 0; i < M_out.vertices.nb(); i++) {
-//                for (auto j = 0; j < M_out.vertices.dimension(); j++) {
-//                    points.push_back(M_out.vertices.point_ptr(i)[j]);
-//                }
-//            }
-
-//            Base::NNSearch search(3);
-//            search.ConstructKDTree(*(m_cvt->mesh()));
-//
-//            GEO::vector<double> nearest;
-//            search.QueryPointSet(points, nearest);
-//
-//            for(auto i=0;i<M_out.vertices.nb();i++){
-//                for(auto j=0;j<M_out.vertices.dimension();j++){
-//                    M_out.vertices.point_ptr(i)[j] = nearest[i*M_out.vertices.dimension()+j];
-//                }
-//            }
 
         } else {
             m_cvt->RVD()->set_exact_predicates(true);
@@ -91,26 +74,34 @@ namespace LpCVT {
     }
 
     void Remesher::GetHDRDT(GEO::Mesh &M_out) {
+        m_cvt->RVD()->set_exact_predicates(true);
+        auto mode_i = GEO::RestrictedVoronoiDiagram::RDT_RVC_CENTROIDS |
+                      GEO::RestrictedVoronoiDiagram::RDT_PREFER_SEEDS;
+        auto mode = GEO::RestrictedVoronoiDiagram::RDTMode(mode_i);
+
         GEO::vector<GEO::index_t> simplices;
         GEO::vector<double> embedding;
-        m_cvt->RVD()->compute_RDT(simplices, embedding);
+        m_cvt->RVD()->compute_RDT(simplices, embedding, mode);
+
+        auto dim = m_cvt->RVD()->dimension();
 
         M_out.vertices.set_double_precision();
-        M_out.vertices.set_dimension(8);
+        M_out.vertices.set_dimension(dim);
 
-        for(int i=0;i<embedding.size()-1;i+=8){
-            std::vector<double> p(8);
-            for(int j=0;j<8;j++){
+        for(int i=0;i<embedding.size()-1;i+=dim){
+            std::vector<double> p(dim);
+            for(int j=0;j<dim;j++){
                 p[j] = embedding[i+j];
             }
             M_out.vertices.create_vertex(p.data());
         }
 
-        for(auto i=0;i<simplices.size();i+=3) {
-            M_out.facets.create_triangle(simplices[i], simplices[i + 1], simplices[i + 2]);
-        }
+//        for(auto i=0;i<simplices.size();i+=3) {
+//            M_out.facets.create_triangle(simplices[i], simplices[i + 1], simplices[i + 2]);
+//        }
+        M_out.facets.assign_triangle_mesh(dim, embedding, simplices,true);
 
-        M_out.facets.connect();
+//        M_out.facets.connect();
 
     }
 

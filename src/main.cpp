@@ -56,7 +56,15 @@ int main(int argc, char **argv) {
         mesh = std::make_shared<LpCVT::Mesh>();
         mesh->LoadMesh(input_filename);
         LpCVT::MeshAdaptor::Convert(*mesh, M);
-    } else {
+
+    }
+    else if (dim==6){
+        mesh = std::make_shared<LpCVT::Mesh>();
+        mesh->LoadMesh(input_filename);
+        mesh->CalculateNormal();
+        LpCVT::MeshAdaptor::Convert6D(*mesh, M,0.1);
+    }
+    else {
         LpCVT::MeshAdaptor::HdMeshLoad(input_filename, M, dim);
     }
 
@@ -90,14 +98,18 @@ int main(int argc, char **argv) {
     remesher.Remeshing(nb_pts, iteration, constrain_verts);
 
     GEO::Mesh M_out;
+
+//    remesher.GetHDRDT(M_out);
+//    LpCVT::MeshAdaptor::HdMeshSave(output_filename, M_out);
+
     remesher.GetRDT(M_out, post_process);
     LpCVT::MeshAdaptor::SaveGEOMesh(output_filename, M_out);
-
-    GEO::Mesh M_vor;
-    if(!vor_path.empty()) {
-
-        remesher.GetRVD(M_vor);
-        LpCVT::MeshAdaptor::SaveGEOMesh(vor_path, M_vor);
-        LpCVT::MeshAdaptor::SaveVoronoiID(M_vor, vor_region_path);
-    }
+//
+//    GEO::Mesh M_vor;
+//    if(!vor_path.empty()) {
+//
+//        remesher.GetRVD(M_vor);
+//        LpCVT::MeshAdaptor::SaveGEOMesh(vor_path, M_vor);
+//        LpCVT::MeshAdaptor::SaveVoronoiID(M_vor, vor_region_path);
+//    }
 }
