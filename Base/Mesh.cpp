@@ -18,6 +18,17 @@ namespace LpCVT {
         return true;
     }
 
+    bool Mesh::CalculateNormal() {
+        igl::per_vertex_normals(m_v, m_f, m_vn);
+        return true;
+    }
+
+    Eigen::MatrixXd Mesh::GetVertexNormals(){
+        if(m_vn.rows() == 0)
+            CalculateNormal();
+        return m_vn;
+    }
+
     bool Mesh::CalculateCurvature() {
         igl::per_vertex_normals(m_v, m_f, m_vn);
         igl::per_face_normals(m_v, m_f, m_fn);

@@ -4,6 +4,7 @@
 #include "Base/MeshAdaptor.h"
 #include <geogram/mesh/mesh_io.h>
 #include <geogram/basic/line_stream.h>
+#include <Eigen/Dense>
 
 namespace LpCVT {
     void MeshAdaptor::Convert(const Mesh &mesh_in, GEO::Mesh &M_out) {
@@ -24,6 +25,29 @@ namespace LpCVT {
 
         M_out.facets.connect();
     }
+
+    void MeshAdaptor::Convert6D(const Mesh &mesh_in, GEO::Mesh &M_out,float aniso_ratio) {
+        M_out.clear();
+        M_out.vertices.set_double_precision();
+        M_out.vertices.set_dimension(6);
+
+        for (auto i = 0; i < mesh_in.m_v.rows(); i++) {
+            std::vector<double> p{mesh_in.m_v(i, 0), mesh_in.m_v(i, 1), mesh_in.m_v(i, 2),
+                                  aniso_ratio*mesh_in.m_vn(i, 0), aniso_ratio*mesh_in.m_vn(i, 1), aniso_ratio*mesh_in.m_vn(i, 2)};
+            M_out.vertices.create_vertex(p.data());
+        }
+
+        for (auto i = 0; i < mesh_in.m_f.rows(); i++) {
+            M_out.facets.create_triangle(mesh_in.m_f(i, 0),
+                                         mesh_in.m_f(i, 1),
+                                         mesh_in.m_f(i, 2));
+        }
+
+        M_out.facets.connect();
+
+    }
+
+
 
     void MeshAdaptor::SaveGEOMesh(const std::string &filepath, const GEO::Mesh &M_out) {
         GEO::MeshIOFlags flags;

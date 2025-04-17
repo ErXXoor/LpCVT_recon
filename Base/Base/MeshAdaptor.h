@@ -12,6 +12,7 @@ namespace LpCVT {
     class MeshAdaptor {
     public:
         static void Convert(const Mesh &mesh_in, GEO::Mesh &M_out);
+        static void Convert6D(const Mesh &mesh_in, GEO::Mesh &M_out,float aniso_ratio=0.3);
 
         static void SaveGEOMesh(const std::string &filepath, const GEO::Mesh &M_out);
 

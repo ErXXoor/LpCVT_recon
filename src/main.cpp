@@ -56,7 +56,15 @@ int main(int argc, char **argv) {
         mesh = std::make_shared<LpCVT::Mesh>();
         mesh->LoadMesh(input_filename);
         LpCVT::MeshAdaptor::Convert(*mesh, M);
-    } else {
+
+    }
+    else if (dim==6){
+        mesh = std::make_shared<LpCVT::Mesh>();
+        mesh->LoadMesh(input_filename);
+        mesh->CalculateNormal();
+        LpCVT::MeshAdaptor::Convert6D(*mesh, M,0.1);
+    }
+    else {
         LpCVT::MeshAdaptor::HdMeshLoad(input_filename, M, dim);
     }
 
@@ -76,33 +84,32 @@ int main(int argc, char **argv) {
         }
     }
 
-    auto remesh_type = LpCVT::Remesher::RemeshType::L8CVT;
+    auto remesh_type = LpCVT::Remesher::RemeshType::L2CVT;
     GEO::SmartPointer<LpCVT::LpCVTIS> is;
     is = new LpCVT::LpCVTIS(M, false, dim, degree, metric_weight);
-    if (remesh_type == LpCVT::Remesher::RemeshType::L8CVT) {
-        if (dim > 3) {
-            //            mesh_ori->CalculateCurvature();
-            //            is->set_mesh(mesh_ori);
-        } else {
-            mesh->CalculateCurvature();
-            is->set_mesh(mesh);
-        }
-        is->set_metric_type(LpCVT::LpCVTIS::MetricType::Quad);
-        //        is->CalQuadMetric();
-    }
+
+//    int ori_verts = M.vertices.nb();
+//    nb_pts = ori_verts+3000;
+
 
     LpCVT::Remesher remesher;
     remesher.Init(&M, is, dim, remesh_type);
+
     remesher.Remeshing(nb_pts, iteration, constrain_verts);
+
     GEO::Mesh M_out;
+
+//    remesher.GetHDRDT(M_out);
+//    LpCVT::MeshAdaptor::HdMeshSave(output_filename, M_out);
+
     remesher.GetRDT(M_out, post_process);
     LpCVT::MeshAdaptor::SaveGEOMesh(output_filename, M_out);
-
-    GEO::Mesh M_vor;
-    if(!vor_path.empty()) {
-
-        remesher.GetRVD(M_vor);
-        LpCVT::MeshAdaptor::SaveGEOMesh(vor_path, M_vor);
-        LpCVT::MeshAdaptor::SaveVoronoiID(M_vor, vor_region_path);
-    }
+//
+//    GEO::Mesh M_vor;
+//    if(!vor_path.empty()) {
+//
+//        remesher.GetRVD(M_vor);
+//        LpCVT::MeshAdaptor::SaveGEOMesh(vor_path, M_vor);
+//        LpCVT::MeshAdaptor::SaveVoronoiID(M_vor, vor_region_path);
+//    }
 }

@@ -36,6 +36,10 @@ namespace LpCVT {
                        unsigned int nb_iter = 100,
                        std::vector<double> constrain_points = std::vector<double>());
 
+        void Remeshing6D(unsigned int nb_pts = 1000,
+                         unsigned int nb_iter = 100,
+                         std::vector<double> constrain_points = std::vector<double>());
+
         void GetRVD(GEO::Mesh &M_out);
 
         void GetRDT(GEO::Mesh &M_out, bool post_process = false);

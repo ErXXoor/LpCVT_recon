@@ -20,6 +20,9 @@ namespace LpCVT {
 
         bool CalculateCurvature();
 
+        bool CalculateNormal();
+        Eigen::MatrixXd GetVertexNormals();
+
         bool NormalizeMesh();
 
         void PlotMesh();
@@ -63,10 +66,6 @@ namespace LpCVT {
 
         Eigen::MatrixXd GetCrossFieldV() const {
             return m_cross_field_v;
-        }
-
-        Eigen::MatrixXd GetVertexNormals() const {
-            return m_vn;
         }
 
         Eigen::MatrixXd GetFaceNormals() const {

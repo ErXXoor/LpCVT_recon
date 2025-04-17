@@ -13,7 +13,6 @@ namespace LpCVT {
         LpCVTWrap(GEO::Mesh *M, GEO::index_t dim);
 
         void set_simplex_func(GEO::IntegrationSimplex_var is);
-        void newiteration() override;
 
         void set_constrain_points(std::vector<double> constrain_points);
     };
